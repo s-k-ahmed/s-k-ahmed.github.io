@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>0 to 60</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="stylesheet.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
+</head>
+<body>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Rules of 0 to 60</p>
+        </div>
+    </div>
+
+    <h1>0 to 60</h1>
+    <h2>a strategy game for 2 players</h2>
+
+    <div class="tilegrid">
+        <button class="tile" id="tile-15">15</button>
+        <button class="tile" id="tile-14">14</button>
+        <button class="tile" id="tile-13">13</button>
+        <button class="tile" id="tile-12">12</button>
+        <button class="tile" id="tile-11">11</button>
+        <button class="tile" id="tile-10">10</button>
+        <button class="tile" id="tile-9">9</button>
+        <button class="tile" id="tile-8">8</button>
+        <button class="tile" id="tile-7">7</button>
+        <button class="tile" id="tile-6">6</button>
+        <button class="tile" id="tile-5">5</button>
+        <button class="tile" id="tile-4">4</button>
+        <button class="tile" id="tile-3">3</button>
+        <button class="tile" id="tile-2">2</button>
+        <button class="tile" id="tile-1">1</button>
+    </div>
+    
+    <!-- <h2 id="turn"></h2> -->
+    <h2 id="round1score"></h2>
+    <div id="round2score"></div>
+    <div id="finalscore"></div>
+
+    <div class="navbox">
+        <button class="navigation" id="nextround">Next Round</button>
+    </div>
+
+    <script type="text/javascript" src="game-0to60.js"></script>
+<!--    <script type="text/javascript" src="server.js"></script> -->
+
+
+</body>
+</html>

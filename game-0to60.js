@@ -14,7 +14,7 @@ function changeColor(id, p){
 };
 
 function updateText(){
-    document.getElementById("turn").innerHTML = turn;
+    //document.getElementById("turn").innerHTML = turn;
     document.getElementById("round1score").innerHTML = `Round 1: A: ${score[0]}, B: ${score[1]}`;
 };
 

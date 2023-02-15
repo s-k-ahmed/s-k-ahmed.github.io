@@ -66,6 +66,7 @@ function initialise() {
     setUp();
     buildChecxLabels();
     updateWatchCount();
+    updateRankCount();
     hideDrs();
     hideEps();
 }
@@ -138,8 +139,7 @@ function newRankOptions() {
 function rankerClick(option) {
     episodesNRanked[window.optionA]++
     episodesNRanked[window.optionB]++
-    var totalNRanked = episodesNRanked.reduce((x, y) => x + y) / 2;
-    document.getElementById("rank-count").innerHTML = "Rankings so far: " + totalNRanked;
+    updateRankCount();
     var eloInitA = episodesElos[window.optionA];
     var eloInitB = episodesElos[window.optionB];
     const kFactor = 10;
@@ -164,6 +164,10 @@ function showRankings(){
     for (index = 0; index < epsRankIndices.length; index++) {
         document.getElementById("rankings").innerHTML += "<br>" + (index + 1) + "\t" + episodesElos[epsRankIndices[index]] + "\t" + episodesNRanked[epsRankIndices[index]] + "\t" + episodeTitles[epsRankIndices[index]];
     }
+}
+function updateRankCount(){
+    var totalNRanked = episodesNRanked.reduce((x, y) => x + y) / 2;
+    document.getElementById("rank-count").innerHTML = "Rankings so far: " + totalNRanked;
 }
 
 const episodeTitles = [

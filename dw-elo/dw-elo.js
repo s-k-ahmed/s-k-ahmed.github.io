@@ -138,6 +138,8 @@ function newRankOptions() {
 function rankerClick(option) {
     episodesNRanked[window.optionA]++
     episodesNRanked[window.optionB]++
+    var totalNRanked = episodesNRanked.reduce((x, y) => x + y) / 2;
+    document.getElementById("rank-count").innerHTML = totalNRanked;
     var eloInitA = episodesElos[window.optionA];
     var eloInitB = episodesElos[window.optionB];
     const kFactor = 10;

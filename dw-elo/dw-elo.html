@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>doctor who elo ranker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="dw-elo-style.css">
+</head>
+<body>
+    
+    <h1>Doctor Who Elo-style ranker</h1>
+
+    <p id="storage">FYI: This website uses local storage in your browser to keep data between sessions. None of the data is sent server-side, so I can't see it, nor will you be tracked anywhere else.</p>
+    
+    <!--Give the option to add new watched episodes-->
+
+    <div id="ep-menu">
+        <p id="test"></p>
+
+        <p id="ep-watch-count"></p>
+
+        <button class="hider" id="hide-eps" onclick="hideEps()">Hide episodes</button><br>
+        <button class="hider" id="hide-drs" onclick="hideDrs()">Hide Doctors</button>
+
+        <div id="ep-list-check"></div>
+
+        <div id="dr-list-check"></div>
+    </div>
+
+    <p></p>
+    
+    <!--Ranking engine-->
+
+    <div id="rank-engine">
+
+        <button class="ranker" id="option-1" onclick="rankerClick(1)">Option 1</button>
+        <button class="ranker" id="option-tie" onclick="rankerClick(0)">Tie</button>
+        <button class="ranker" id="option-2" onclick="rankerClick(-1)">Option 2</button>
+
+    </div>
+
+    <p></p>
+
+    <button id="new-options" onclick="newRankOptions()">New rank options</button>
+
+    <!--View output ranking-->
+
+    <p></p>
+
+    <button id="view-rankings" onclick="showRankings()">Show rankings</button>
+
+    <pre id="rankings"></pre>
+
+    <!--
+    <p>
+        <button id="reset-all" onclick="resetLocalStorage()">⚠ Reset everything</button>
+    </p>
+    -->
+    
+    
+    <script type="text/javascript" src="dw-elo.js"></script>
+
+</body>
+</html>

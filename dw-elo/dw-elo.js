@@ -149,8 +149,8 @@ function rankerClick(option) {
     var expScoreB = qB / (qA + qB);
     var scoreA = 0.5 + (option / 2);
     var scoreB = 0.5 - (option / 2);
-    var eloNewA = Math.floor(eloInitA + kFactor * (scoreA - expScoreA));
-    var eloNewB = Math.floor(eloInitB + kFactor * (scoreB - expScoreB));
+    var eloNewA = Math.round(eloInitA + kFactor * (scoreA - expScoreA));
+    var eloNewB = Math.round(eloInitB + kFactor * (scoreB - expScoreB));
     episodesElos[window.optionA] = eloNewA;
     episodesElos[window.optionB] = eloNewB;
     saveToStorage();

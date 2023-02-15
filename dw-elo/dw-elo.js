@@ -155,12 +155,12 @@ function rankerClick(option) {
     newRankOptions();
 }
 function showRankings(){
-    document.getElementById("rankings").innerHTML = "Rank \t Rating \t Episode";
+    document.getElementById("rankings").innerHTML = "Rank \t Rating \t nRanked \t Episode";
     var epsRankIndices = [];
     episodesNRanked.forEach((value, index) => value > 0 ? epsRankIndices.push(index) : null);
     epsRankIndices.sort((a, b) => episodesElos[b] - episodesElos[a]);
     for (index = 0; index < epsRankIndices.length; index++) {
-        document.getElementById("rankings").innerHTML += "<br>" + (index + 1) + "\t" + episodesElos[epsRankIndices[index]] + "\t" + episodeTitles[epsRankIndices[index]];
+        document.getElementById("rankings").innerHTML += "<br>" + (index + 1) + "\t" + episodesElos[epsRankIndices[index]] + "\t" + episodesNRanked[epsRankIndices[index]] + "\t" + episodeTitles[epsRankIndices[index]];
     }
 }
 

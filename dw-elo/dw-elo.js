@@ -130,7 +130,7 @@ function buildChecxLabels() {
 function newRankOptions() {
     var epsWatchIndices = [];
     episodesWatched.forEach((value, index) => value === true ? epsWatchIndices.push(index) : null)
-    epsWatchIndices.sort((a, b) => episodesNRanked[a]*Math.random() - episodesNRanked[b]*Math.random())
+    epsWatchIndices.sort((a, b) => ((episodesNRanked[a]+1)*Math.random()) - ((episodesNRanked[b]+1)*Math.random()))
     window.optionA = epsWatchIndices[0];
     window.optionB = epsWatchIndices[1];
     document.getElementById("option-1").innerHTML = episodeTitles[optionA];

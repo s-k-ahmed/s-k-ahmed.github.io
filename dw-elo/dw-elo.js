@@ -130,9 +130,9 @@ function buildChecxLabels() {
 function newRankOptions() {
     var epsWatchIndices = [];
     episodesWatched.forEach((value, index) => value === true ? epsWatchIndices.push(index) : null)
-    var randNums = Array(epsWatchIndices.length).fill().map(() => Math.random());
-    window.optionA = epsWatchIndices[randNums.indexOf(Math.max(...randNums))];
-    window.optionB = epsWatchIndices[randNums.indexOf(Math.min(...randNums))];
+    epsWatchIndices.sort((a, b) => episodesNRanked[a]*Math.random() - episodesNRanked[b]*Math.random())
+    window.optionA = epsWatchIndices[0];
+    window.optionB = epsWatchIndices[1];
     document.getElementById("option-1").innerHTML = episodeTitles[optionA];
     document.getElementById("option-2").innerHTML = episodeTitles[optionB];
 }

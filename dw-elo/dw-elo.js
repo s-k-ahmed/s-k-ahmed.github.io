@@ -185,7 +185,7 @@ function hideDrRankings(){
 function updateEpRankings(){
     document.getElementById("ep-rankings").innerHTML = "Rank \t Rating \t nRanked \t Episode";
     var epsRankIndices = [];
-    episodesNRanked.forEach((value, index) => value > 0 ? epsRankIndices.push(index) : null);
+    episodesNRanked.forEach((value, index) => value > 0 && episodesWatched[index] == true ? epsRankIndices.push(index) : null);
     epsRankIndices.sort((a, b) => episodesElos[b] - episodesElos[a]);
     for (index = 0; index < epsRankIndices.length; index++) {
         document.getElementById("ep-rankings").innerHTML += "<br>" + (index + 1) + "\t" + episodesElos[epsRankIndices[index]] + "\t" + episodesNRanked[epsRankIndices[index]] + "\t" + episodeTitles[epsRankIndices[index]];
@@ -194,9 +194,7 @@ function updateEpRankings(){
 function updateDrRankings(){
     document.getElementById("dr-rankings").innerHTML = "Rank \t avg Rating \t Doctor";
     const drEloMeans = [];
-    var drEpIndices = [];
     var drIndices = [];
-    //need to exclude doctors who haven't had any episodes watched....
     for (dr=0; dr < doctors.length; dr++) {
         drIndices[dr] = dr;
         var drEpIndices = [];
@@ -534,25 +532,25 @@ const episodeTitles = [
     "The Power of the Doctor",
 ]
 const doctors = [
-    "First (Hartnell)", 
-    "Second (Troughton)", 
-    "Third (Pertwee)", 
-    "Fourth (Baker)", 
-    "Fifth (Davison)", 
-    "Sixth (Baker)", 
-    "Seventh (McCoy)", 
-    "Eighth (McGann)", 
-    "Ninth (Eccleston)", 
-    "Tenth (Tennant)", 
-    "Eleventh (Smith)",
-    "Twelfth (Capaldi)",
-    "Thirteenth (Whittaker)"
+    "1st (Hartnell)", 
+    "2nd (Troughton)", 
+    "3rd (Pertwee)", 
+    "4th (Baker)", 
+    "5th (Davison)", 
+    "6th (Baker)", 
+    "7th (McCoy)", 
+    "8th (McGann)", 
+    "9th (Eccleston)", 
+    "10th (Tennant)", 
+    "11th (Smith)",
+    "12th (Capaldi)",
+    "13th (Whittaker)"
 ]
 const drEps = [
     [0, 29], [30, 50], [51, 74], [75, 116], [117, 136], [137, 147], [148, 159], [160, 160], [161, 170], [171, 206], [207, 245], [246, 280], [281, 309]
 ]
 
-var episodesWatched = []    // true for episodes marked as watched, false for episodes marked as not watched, null for episodes that haven't been checked or unchecked
+var episodesWatched = []    // true for episodes marked as watched, false for episodes not marked as watched
 var episodesNRanked = []    // number of times the episode has been ranked against another
 var episodesElos = []       // elo scores for each episode
 var optionA;

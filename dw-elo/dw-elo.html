@@ -21,8 +21,8 @@
         <p id="ep-watch-count"></p>
         <p id="rank-count"></p>
 
-        <button class="hider" id="hide-eps" onclick="hideEps()">Hide episodes</button><br>
-        <button class="hider" id="hide-drs" onclick="hideDrs()">Hide Doctors</button>
+        <button class="hider" id="hide-eps" onclick="hideEps()">Show episodes</button><br>
+        <button class="hider" id="hide-drs" onclick="hideDrs()">Show Doctors</button>
 
         <div id="ep-list-check"></div>
 
@@ -49,9 +49,11 @@
 
     <p></p>
 
-    <button id="view-rankings" onclick="showRankings()">Show rankings</button>
+    <button id="view-rankings" onclick="hideRankings()">Show rankings</button>
+    <button id="view-dr-rankings" onclick="hideDrRankings()">Show rankings by Doctor</button>
 
-    <pre id="rankings"></pre>
+    <pre id="ep-rankings"></pre>
+    <pre id="dr-rankings"></pre>
 
     <!--
     <p>

@@ -46,7 +46,7 @@ function hideEps() {
         document.getElementById("hide-eps").innerHTML = "Hide episodes"
     } else {
         epList.style.display = "none";
-        document.getElementById("hide-eps").innerHTML = "Unhide episodes"
+        document.getElementById("hide-eps").innerHTML = "Show episodes"
     }
 }
 function hideDrs() {
@@ -56,7 +56,7 @@ function hideDrs() {
         document.getElementById("hide-drs").innerHTML = "Hide Doctors"
     } else {
         drList.style.display = "none";
-        document.getElementById("hide-drs").innerHTML = "Unhide Doctors"
+        document.getElementById("hide-drs").innerHTML = "Show Doctors"
     }
 }
 function updateWatchCount() {
@@ -69,6 +69,8 @@ function initialise() {
     updateRankCount();
     hideDrs();
     hideEps();
+    hideRankings();
+    hideDrRankings();
 }
 function resetLocalStorage() {
     for (ep=0; ep<episodeTitles.length; ep++) {
@@ -154,15 +156,64 @@ function rankerClick(option) {
     episodesElos[window.optionA] = eloNewA;
     episodesElos[window.optionB] = eloNewB;
     saveToStorage();
+    updateEpRankings();
+    updateDrRankings();
     newRankOptions();
 }
-function showRankings(){
-    document.getElementById("rankings").innerHTML = "Rank \t Rating \t nRanked \t Episode";
+function hideRankings(){
+    updateEpRankings();
+    const epRank = document.getElementById("ep-rankings");
+    if (epRank.style.display == "none") {
+        epRank.style.display = "block";
+        document.getElementById("view-rankings").innerHTML = "Hide rankings"
+    } else {
+        epRank.style.display = "none";
+        document.getElementById("view-rankings").innerHTML = "Show rankings"
+    }
+}
+function hideDrRankings(){
+    updateDrRankings();
+    const drRank = document.getElementById("dr-rankings");
+    if (drRank.style.display == "none") {
+        drRank.style.display = "block";
+        document.getElementById("view-dr-rankings").innerHTML = "Hide rankings by Doctor"
+    } else {
+        drRank.style.display = "none";
+        document.getElementById("view-dr-rankings").innerHTML = "Show rankings by Doctor"
+    }
+}
+function updateEpRankings(){
+    document.getElementById("ep-rankings").innerHTML = "Rank \t Rating \t nRanked \t Episode";
     var epsRankIndices = [];
     episodesNRanked.forEach((value, index) => value > 0 ? epsRankIndices.push(index) : null);
     epsRankIndices.sort((a, b) => episodesElos[b] - episodesElos[a]);
     for (index = 0; index < epsRankIndices.length; index++) {
-        document.getElementById("rankings").innerHTML += "<br>" + (index + 1) + "\t" + episodesElos[epsRankIndices[index]] + "\t" + episodesNRanked[epsRankIndices[index]] + "\t" + episodeTitles[epsRankIndices[index]];
+        document.getElementById("ep-rankings").innerHTML += "<br>" + (index + 1) + "\t" + episodesElos[epsRankIndices[index]] + "\t" + episodesNRanked[epsRankIndices[index]] + "\t" + episodeTitles[epsRankIndices[index]];
+    }
+}
+function updateDrRankings(){
+    document.getElementById("dr-rankings").innerHTML = "Rank \t avg Rating \t Doctor";
+    const drEloMeans = [];
+    var drEpIndices = [];
+    var drIndices = [];
+    //need to exclude doctors who haven't had any episodes watched....
+    for (dr=0; dr < doctors.length; dr++) {
+        drIndices[dr] = dr;
+        var drEpIndices = [];
+        let drFirst = drEps[dr][0];
+        let drLast = drEps[dr][1];
+        for (ep=0; ep < episodesNRanked.length; ep++) {
+            if (episodesNRanked[ep] > 0 && ep >= drFirst && ep <= drLast) {
+                drEpIndices.push(ep);
+            }
+        }
+        const drWatchedElos = drEpIndices.map(value => episodesElos[value]);
+        drEloMeans[dr] = Math.round(drWatchedElos.reduce((x, y) => x + y, 0) / drEpIndices.length);
+    }
+    var drIndFilt = drIndices.filter(x => !isNaN(drEloMeans[x]))
+    drIndFilt.sort((a, b) => drEloMeans[b] - drEloMeans[a]);
+    for (index = 0; index < drIndFilt.length; index++) {
+        document.getElementById("dr-rankings").innerHTML += "<br>" + (index + 1) + "\t" + drEloMeans[drIndFilt[index]] + "\t" + doctors[drIndFilt[index]];
     }
 }
 function updateRankCount(){
@@ -495,9 +546,7 @@ const doctors = [
     "Tenth (Tennant)", 
     "Eleventh (Smith)",
     "Twelfth (Capaldi)",
-    "Thirteenth (Whittaker)",
-    "Fourteenth (Tennant)",
-    "Fifteenth (Gatwa)"
+    "Thirteenth (Whittaker)"
 ]
 const drEps = [
     [0, 29], [30, 50], [51, 74], [75, 116], [117, 136], [137, 147], [148, 159], [160, 160], [161, 170], [171, 206], [207, 245], [246, 280], [281, 309]

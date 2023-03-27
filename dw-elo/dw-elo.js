@@ -326,7 +326,7 @@ const episodeTitles = [
     "The Armageddon Factor",
     "Destiny of the Daleks",
     "City of Death",
-    "Creature from the Pit",
+    "The Creature from the Pit",
     "Nightmare of Eden",
     "The Horns of Nimon",
     "Shada",

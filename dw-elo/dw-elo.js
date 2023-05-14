@@ -311,7 +311,7 @@ const episodeTitles = [
     "The Deadly Assassin",
     "The Face of Evil",
     "The Robots of Death",
-    "Talons of Weng-Chiang",
+    "The Talons of Weng-Chiang",
     "Horror of Fang Rock",
     "The Invisible Enemy",
     "Image of the Fendahl",
@@ -530,6 +530,9 @@ const episodeTitles = [
     "Eve of the Daleks",
     "Legend of the Sea Devils",
     "The Power of the Doctor",
+    "The Star Beast",
+    "Wild Blue Yonder",
+    "The Giggle",
 ]
 const doctors = [
     "1st (Hartnell)", 
@@ -544,10 +547,11 @@ const doctors = [
     "10th (Tennant)", 
     "11th (Smith)",
     "12th (Capaldi)",
-    "13th (Whittaker)"
+    "13th (Whittaker)",
+    "14th (Tennant)"
 ]
 const drEps = [
-    [0, 29], [30, 50], [51, 74], [75, 116], [117, 136], [137, 147], [148, 159], [160, 160], [161, 170], [171, 206], [207, 245], [246, 280], [281, 309]
+    [0, 29], [30, 50], [51, 74], [75, 116], [117, 136], [137, 147], [148, 159], [160, 160], [161, 170], [171, 206], [207, 245], [246, 280], [281, 309], [310, 312]
 ]
 
 var episodesWatched = []    // true for episodes marked as watched, false for episodes not marked as watched

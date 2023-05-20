@@ -375,7 +375,7 @@ const episodeTitles = [
     "Remembrance of the Daleks",
     "The Happiness Patrol",
     "Silver Nemesis",
-    "Greatest Show in the Galaxy",
+    "The Greatest Show in the Galaxy",
     "Battlefield",
     "Ghost Light",
     "The Curse of Fenric",

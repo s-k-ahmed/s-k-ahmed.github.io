@@ -33,7 +33,7 @@ h2 {
 
 .inputs, .outputs {
     font: 16px Roboto, sans-serif;
-    max-width: 400px;
+    max-width: 360px;
     margin: auto;
 }
 
@@ -41,10 +41,65 @@ button {
     font: 16px Roboto, sans-serif;
 }
 
-input {
-    font: 16px Roboto, sans-serif;
+input[type=button] {
+    border: none;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: bold 48px;
+}
+
+input[type=text] {
+    border: 1px solid black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+}
+
+input[type=shuffle] {
+    border: 1px solid black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
 }
 
 body {
     background-color: white;
 }
+
+.main {
+    display:flex;
+    --s: 100px;  /* size  */
+    --m: 4px;    /* margin */
+    --f: calc(1.732 * var(--s) + 4 * var(--m)  - 1px);
+}
+  
+  .buttons {
+    font-size: 0; /*disable white space between inline block element */
+  }
+  
+  .buttons input {
+    width: var(--s);
+    margin: var(--m);
+    height: calc(var(--s)*1.1547); 
+    display: inline-block;
+    font-size: 36px;
+    clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
+    background: gainsboro;
+    margin-bottom: calc(var(--m) - var(--s)*0.2885); 
+  }
+  #letter0 {
+    background: darkorange;
+  }
+  .buttons::before {
+    content: "";
+    width: calc(var(--s)/2 + var(--m));
+    float: left;
+    height: 120%;
+    shape-outside: repeating-linear-gradient(#000 0 10%, #0000 0 80%, #000 0 10%);
+  }

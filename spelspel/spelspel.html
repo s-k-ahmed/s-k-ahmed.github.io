@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DE SPELLENDE BIJ</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="stylesheet.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+    <h1>DE SPELLENDE BIJ</h1>
+    <h2>ontdek woorden binnen woorden</h2>
+
+    <div class="inputs">
+        <input type="text" id="woord-input">
+        <input type="submit" id="submit-btn" onclick="submitWord()">
+        <br>
+        <input type="button" id="letter0" onclick="buttonPress(0)">
+        <input type="button" id="letter1" onclick="buttonPress(1)">
+        <input type="button" id="letter2" onclick="buttonPress(2)">
+        <input type="button" id="letter3" onclick="buttonPress(3)">
+        <input type="button" id="letter4" onclick="buttonPress(4)">
+        <input type="button" id="letter5" onclick="buttonPress(5)">
+        <input type="button" id="letter6" onclick="buttonPress(6)">
+        <br>
+        <button class="shuffle" id="shuffle" onclick="shuffleLetters()">Shuffle</button>
+    </div>
+
+    <div class="outputs">
+        <p id="invalid-guess"></p>
+        <p id="output"></p>
+        <br>
+        <button class="show-answers" id="show-answers" onclick="showAnswers()">Show answers</button>
+    </div>
+
+    <script type="text/javascript" src="basiswoorden-gekeurd-4letters.js"></script>
+    <script type="text/javascript" src="zevenletters.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+
+
+</body>
+</html>

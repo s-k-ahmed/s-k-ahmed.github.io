@@ -1,0 +1,4 @@
+Functions:
+- selectWoord (and central letter)
+- findSol
+- controleerWoord (using only acceptable letters, using central letter)

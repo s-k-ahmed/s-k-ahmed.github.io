@@ -1,0 +1,50 @@
+.tile {
+    background-color: lightgray;
+    font: bold 2em Roboto, sans-serif;
+    text-align: center;
+    padding: 10px;
+    transition-duration: 0.25s;
+    width: 40px;
+    height: 40px;
+}
+
+.tilegrid {
+    display: grid;
+    margin: 30px;
+    grid-gap: 5px;
+    width: auto;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+    justify-content: center;
+    align-content: center;
+}
+
+
+h1 {
+    font: bold 40px Roboto, sans-serif;
+    text-align: center;
+    margin: 20px;
+}
+
+h2 {
+    font: bold 18px Roboto, sans-serif;
+    text-align: center;
+    margin: 20px;
+}
+
+.inputs, .outputs {
+    font: 16px Roboto, sans-serif;
+    max-width: 400px;
+    margin: auto;
+}
+
+button {
+    font: 16px Roboto, sans-serif;
+}
+
+input {
+    font: 16px Roboto, sans-serif;
+}
+
+body {
+    background-color: white;
+}

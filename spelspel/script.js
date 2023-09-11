@@ -9,7 +9,7 @@ const GUESSES = [];
 const shuffle = [0, 1, 2, 3, 4, 5, 6];
 
 // Chooses a word and central letter based on the current day
-selectWord(dateUnix-1);
+selectWord(dateUnix);
 
 // Sets up word submission on pressing Enter
 document.getElementById("woord-input").addEventListener("keydown", function(event){

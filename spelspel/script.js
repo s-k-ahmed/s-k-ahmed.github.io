@@ -27,7 +27,18 @@ function testOutput(x) {
     document.getElementById("output").innerHTML += x + "<br>";
 }
 
-function checkDate() {
+// TO-DO: Checks if the date matches the cached data, if not it deletes the previous day's info
+function checkDate(){
+
+}
+
+// TO-DO: Saves today's guesses to local storage
+function savetoStorage() {
+    
+}
+
+// TO-DO: Retrieves today's guesses from local storage
+function getfromStorage() {
     
 }
 
@@ -42,6 +53,7 @@ function selectWord(d) {
     shuffleLetters();
 };
 
+// TO-DO: Finds solutions for today's word
 function findSol() {
 
 }; 

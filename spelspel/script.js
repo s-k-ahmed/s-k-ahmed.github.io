@@ -5,8 +5,12 @@ var CENTRAALINDEX;
 var CENTRAALLETTER;
 const WOORDLETTERS = [];
 const alphletters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-const GUESSES = [];
+var GUESSES = [];
 const shuffle = [0, 1, 2, 3, 4, 5, 6];
+
+if (typeof(Storage) == "undefined") {
+    alert("Sorry, your browser does not support local storage, so data won't be saved between sessions.")
+}
 
 // Chooses a word and central letter based on the current day
 selectWord(dateUnix);
@@ -27,23 +31,45 @@ function testOutput(x) {
     document.getElementById("output").innerHTML += x + "<br>";
 }
 
-// TO-DO: Checks if the date matches the cached data, if not it deletes the previous day's info
+// Prints the variable x in the output section
+function printOutput(x) {
+    if (isPangram(x)) {
+        document.getElementById("output").innerHTML = "<b>" + x + "</b><br>" + document.getElementById("output").innerHTML;
+    } else {
+        document.getElementById("output").innerHTML = x + "<br>" + document.getElementById("output").innerHTML;
+    }
+}
+
+// Prints the variable x as an invalid error message
+function printError(x) {
+    document.getElementById("invalid-guess").innerHTML = x;
+}
+
+// TO-DO? Checks if the date matches the cached data, if not it deletes the previous day's info
 function checkDate(){
 
 }
 
-// TO-DO: Saves today's guesses to local storage
+// Saves today's guesses to local storage
 function savetoStorage() {
-    
+    localStorage.setItem("date", dateUnix);
+    let jsonGuesses = JSON.stringify(GUESSES);
+    localStorage.setItem("guesses", jsonGuesses);
 }
 
-// TO-DO: Retrieves today's guesses from local storage
-function getfromStorage() {
-    
+// Retrieves today's guesses from local storage
+function getfromStorage(d) {
+    let jsonDate = localStorage.getItem("date");
+    if (jsonDate == d) {
+        let jsonGuesses = localStorage.getItem("guesses");
+        GUESSES = JSON.parse(jsonGuesses);
+        GUESSES.forEach(g => printOutput(g));
+    }
 }
 
 // Uses the day seed to select a pangram word and central letter
 function selectWord(d) {
+    getfromStorage(d);
     let woordnummer = (d ** 3) % ZEVENS.length;
     CENTRAALINDEX = (d ** 23) % 7;  // 23rd power gives equal probability for each of the 7 letters
     WOORD = ZEVENS[woordnummer];
@@ -53,8 +79,14 @@ function selectWord(d) {
     shuffleLetters();
 };
 
+function isPangram(w) {
+    let guessLetters = [];
+    alphletters.forEach((value) => w.indexOf(value) != -1 ? guessLetters.push(value) : null);   // Creates array of letters in the guess
+    return (guessLetters.length == 7);
+};
+
 // TO-DO: Finds solutions for today's word
-function findSol() {
+function findSol(w) {
 
 }; 
 
@@ -72,7 +104,7 @@ function checkWord(w) {
 
     // Has this word already been guessed?
     let newguess = GUESSES.reduce((total, current) => current == w ? total + 1 : total, 0);     // Counts how many times this guess has been made already (incl. this time)
-    let isNew = (newguess == 1);
+    let isNew = (newguess == 0);
 
     let isNewValidWord = (isWord && isValid && isNew);
     return isNewValidWord;
@@ -83,18 +115,19 @@ function buttonPress(l) {
     document.getElementById("woord-input").value += WOORDLETTERS[shuffle[l]];
 };
 
-// Takes guess, checks if it is valid, then prints it/an error message.
+// Takes guess, checks if it is valid, then prints it/an error message and saves it to local storage.
 function submitWord() {
     var guess = document.getElementById("woord-input").value;
-    GUESSES.push(guess);
-    document.getElementById("invalid-guess").innerHTML = "";
+    printError("");
     document.getElementById("woord-input").value = "";
     var guess_valid = checkWord(guess);
     if (guess_valid == false) {
-        document.getElementById("invalid-guess").innerHTML = "Invalid guess, please try again!";
+        printError("Invalid guess, please try again!");
         return;
     }
-    document.getElementById("output").innerHTML += "<br>" + guess;
+    printOutput(guess);
+    GUESSES.push(guess);
+    savetoStorage();
 }
 
 // Labels a button with the appropriate letter in the shuffle array

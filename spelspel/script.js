@@ -6,8 +6,10 @@ var CENTRAALLETTER;
 const WOORDLETTERS = [];
 const alphletters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
 var GUESSES = [];
+var ANTWOORDEN = [];
 var scoreHistory = [];
 const shuffle = [0, 1, 2, 3, 4, 5, 6];
+var answersShown = false;
 
 if (typeof(Storage) == "undefined") {
     alert("Sorry, your browser does not support local storage, so data won't be saved between sessions.")
@@ -15,7 +17,7 @@ if (typeof(Storage) == "undefined") {
 
 // Chooses a word and central letter based on the current day
 selectWord(dateUnix);
-testOutput(JSON.stringify(scoreHistory));
+testOutput(scoreHistory);
 
 // Sets up word submission on pressing Enter and shuffle on pressing Space
 document.getElementById("woord-input").addEventListener("keydown", function(event){
@@ -65,11 +67,15 @@ function getfromStorage(d) {
     let jsonDate = localStorage.getItem("date");
     let jsonGuesses = localStorage.getItem("guesses");
     let jsonScoreHistory = localStorage.getItem("score-hist");
+    if (jsonDate == null || jsonGuesses == null || jsonScoreHistory == null) {
+        return;
+    }
     scoreHistory = JSON.parse(jsonScoreHistory);
     if (jsonDate == d) {
         GUESSES = JSON.parse(jsonGuesses);
         GUESSES.forEach(g => printOutput(g));
     } else {
+        localStorage.clear("answers");
         let prevGuesses = JSON.parse(jsonGuesses);
         scoreHistory.push(prevGuesses.length);
         let jsonScoreHistory = JSON.stringify(scoreHistory);
@@ -86,6 +92,7 @@ function selectWord(d) {
     alphletters.forEach((value) => WOORD.indexOf(value) != -1 ? WOORDLETTERS.push(value) : null);   // Goes through the alphabet in order and adds the letters of the chosen word to the array WOORDLETTERS
     CENTRAALLETTER = WOORDLETTERS[CENTRAALINDEX];
     [shuffle[0], shuffle[CENTRAALINDEX]] = [shuffle[CENTRAALINDEX], shuffle[0]] // Swaps the central letter index to the front so it can be avoided during shuffling
+    findSols();
     shuffleLetters();
     savetoStorage();
 };
@@ -96,9 +103,35 @@ function isPangram(w) {
     return (guessLetters.length == 7);
 };
 
-// TO-DO: Finds solutions for today's word
-function findSol(w) {
+// Finds all solutions to today's puzzle and saves them in the array ANTWOORDEN + local storage (only done once per day)
+function findSols() {
+    let jsonAnswers = localStorage.getItem("answers");
+    if (jsonAnswers != null) {
+        ANTWOORDEN = JSON.parse(jsonAnswers);
+        return;
+    }
+    WOORDEN.forEach(x => checkWord(x) ? ANTWOORDEN.push(x) : null);
+    jsonAnswers = JSON.stringify(ANTWOORDEN);
+    localStorage.setItem("answers", jsonAnswers);
+}
 
+// Prints the list of possible answers
+function showAnswers() {
+    document.getElementById("antwoorden").innerHTML = "";
+    if (answersShown) {
+        document.getElementById("show-answers").innerHTML = "Show answers";
+        answersShown = false;
+        return;
+    }
+    document.getElementById("show-answers").innerHTML = "Hide answers";
+    ANTWOORDEN.forEach(x => {
+        if (isPangram(x)) {
+            document.getElementById("antwoorden").innerHTML += "<b>" + x + "</b><br>";
+        } else {
+            document.getElementById("antwoorden").innerHTML += x + "<br>";
+        }
+    });
+    answersShown = true;
 }; 
 
 // Checks to see if the input is a valid guess
@@ -110,7 +143,13 @@ function checkWord(w) {
     let guessLetters = [];
     alphletters.forEach((value) => w.indexOf(value) != -1 ? guessLetters.push(value) : null);   // Creates array of letters in the guess
     let hasValidLetters = guessLetters.every((value) => WOORDLETTERS.indexOf(value) != -1);     // Returns FALSE if any letter in the guess is not in the pangram
+    if (hasValidLetters == false) {
+        return false;
+    }
     let hasCentral = (guessLetters.indexOf(CENTRAALLETTER) != -1);                              // Returns FALSE if the central letter is missing
+    if (hasCentral == false) {
+        return false;
+    }
     let isValid = (hasValidLetters && hasCentral);
 
     // Has this word already been guessed?

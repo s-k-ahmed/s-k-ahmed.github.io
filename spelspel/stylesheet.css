@@ -106,3 +106,7 @@ body {
     /*shape-outside: repeating-linear-gradient(#000 0 10%, #0000 0 80%, #000 0 10%);*/
     shape-outside: radial-gradient(#0000 95%, #000 5%);
   }
+
+#antwoorden {
+    column-count: 3;
+}

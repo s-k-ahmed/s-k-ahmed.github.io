@@ -15,7 +15,7 @@ if (typeof(Storage) == "undefined") {
 // Chooses a word and central letter based on the current day
 selectWord(dateUnix);
 
-// Sets up word submission on pressing Enter
+// Sets up word submission on pressing Enter and shuffle on pressing Space
 document.getElementById("woord-input").addEventListener("keydown", function(event){
     if (event.key === "Enter") {
         submitWord();
@@ -31,13 +31,14 @@ function testOutput(x) {
     document.getElementById("output").innerHTML += x + "<br>";
 }
 
-// Prints the variable x in the output section
+// Prints the variable x in the output section and word count in the wordcount section
 function printOutput(x) {
     if (isPangram(x)) {
         document.getElementById("output").innerHTML = "<b>" + x + "</b><br>" + document.getElementById("output").innerHTML;
     } else {
         document.getElementById("output").innerHTML = x + "<br>" + document.getElementById("output").innerHTML;
     }
+    document.getElementById("woordtel").innerHTML = "Je hebt al <b>" + GUESSES.length + "</b> woorden gevonden."
 }
 
 // Prints the variable x as an invalid error message
@@ -115,6 +116,12 @@ function buttonPress(l) {
     document.getElementById("woord-input").value += WOORDLETTERS[shuffle[l]];
 };
 
+// Delete the last letter inputted
+function backspace() {
+    let inputbox = document.getElementById("woord-input");
+    inputbox.value = inputbox.value.slice(0, inputbox.value.length - 1);
+}
+
 // Takes guess, checks if it is valid, then prints it/an error message and saves it to local storage.
 function submitWord() {
     var guess = document.getElementById("woord-input").value;
@@ -125,9 +132,10 @@ function submitWord() {
         printError("Invalid guess, please try again!");
         return;
     }
-    printOutput(guess);
     GUESSES.push(guess);
+    printOutput(guess);
     savetoStorage();
+    document.getElementById("woord-input").click();
 }
 
 // Labels a button with the appropriate letter in the shuffle array

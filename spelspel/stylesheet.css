@@ -52,11 +52,12 @@ input[type=button] {
 
 input[type=text] {
     border: 1px solid black;
-    padding: 15px 32px;
+    padding: 15px 30px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 36px;
+    max-width: 300px;
 }
 
 input[type=shuffle] {
@@ -81,6 +82,7 @@ body {
   
   .buttons {
     font-size: 0; /*disable white space between inline block element */
+    padding: 18px 18px
   }
   
   .buttons input {
@@ -100,6 +102,7 @@ body {
     content: "";
     width: calc(var(--s)/2 + var(--m));
     float: left;
-    height: 120%;
-    shape-outside: repeating-linear-gradient(#000 0 10%, #0000 0 80%, #000 0 10%);
+    height: 100%;
+    /*shape-outside: repeating-linear-gradient(#000 0 10%, #0000 0 80%, #000 0 10%);*/
+    shape-outside: radial-gradient(#0000 95%, #000 5%);
   }

@@ -124,6 +124,7 @@ function showAnswers() {
         return;
     }
     document.getElementById("show-answers").innerHTML = "Hide answers";
+    document.getElementById("antwoorden").innerHTML = "Er staan <b>" + ANTWOORDEN.length + "</b> mogelijke antwoorden in ons woordenlijst.<br>";
     ANTWOORDEN.forEach(x => {
         if (isPangram(x)) {
             document.getElementById("antwoorden").innerHTML += "<b>" + x + "</b><br>";

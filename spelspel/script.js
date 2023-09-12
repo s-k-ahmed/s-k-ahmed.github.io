@@ -67,20 +67,27 @@ function getfromStorage(d) {
     let jsonDate = localStorage.getItem("date");
     let jsonGuesses = localStorage.getItem("guesses");
     let jsonScoreHistory = localStorage.getItem("score-hist");
-    if (jsonDate == null || jsonGuesses == null || jsonScoreHistory == null) {
+    scoreHistory = JSON.parse(jsonScoreHistory);
+    if (jsonDate == null) {
         return;
     }
-    scoreHistory = JSON.parse(jsonScoreHistory);
+    if (jsonGuesses == null) {
+        GUESSES = [];
+    }
+    if (jsonScoreHistory == null) {
+        scoreHistory = [];
+    }
     if (jsonDate == d) {
         GUESSES = JSON.parse(jsonGuesses);
         GUESSES.forEach(g => printOutput(g));
-    } else {
-        localStorage.clear("answers");
-        let prevGuesses = JSON.parse(jsonGuesses);
-        scoreHistory.push(prevGuesses.length);
-        let jsonScoreHistory = JSON.stringify(scoreHistory);
-        localStorage.setItem("score-hist", jsonScoreHistory);   // Sets score history in local storage only on a new day
+        return;
     }
+    localStorage.removeItem("answers");
+    let prevGuesses = JSON.parse(jsonGuesses);
+    scoreHistory.push(prevGuesses.length);    
+    jsonScoreHistory = JSON.stringify(scoreHistory);
+    localStorage.setItem("score-hist", jsonScoreHistory);   // Sets score history in local storage only on a new day
+    
 }
 
 // Uses the day seed to select a pangram word and central letter
@@ -124,7 +131,7 @@ function showAnswers() {
         return;
     }
     document.getElementById("show-answers").innerHTML = "Hide answers";
-    document.getElementById("antwoorden").innerHTML = "Er staan <b>" + ANTWOORDEN.length + "</b> mogelijke antwoorden in ons woordenlijst.<br>";
+    document.getElementById("antwoorden").innerHTML = "Er staan <b>" + ANTWOORDEN.length + "</b> mogelijke antwoorden in ons woordenlijst.<br><br>";
     ANTWOORDEN.forEach(x => {
         if (isPangram(x)) {
             document.getElementById("antwoorden").innerHTML += "<b>" + x + "</b><br>";

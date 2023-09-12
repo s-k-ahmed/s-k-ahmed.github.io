@@ -6,6 +6,7 @@ var CENTRAALLETTER;
 const WOORDLETTERS = [];
 const alphletters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
 var GUESSES = [];
+var scoreHistory = [];
 const shuffle = [0, 1, 2, 3, 4, 5, 6];
 
 if (typeof(Storage) == "undefined") {
@@ -14,6 +15,7 @@ if (typeof(Storage) == "undefined") {
 
 // Chooses a word and central letter based on the current day
 selectWord(dateUnix);
+testOutput(JSON.stringify(scoreHistory));
 
 // Sets up word submission on pressing Enter and shuffle on pressing Space
 document.getElementById("woord-input").addEventListener("keydown", function(event){
@@ -28,7 +30,7 @@ document.getElementById("woord-input").addEventListener("keydown", function(even
 
 // Prints the variable x on the HTML page (used for testing/debugging)
 function testOutput(x) {
-    document.getElementById("output").innerHTML += x + "<br>";
+    document.getElementById("test").innerHTML += x + "<br>";
 }
 
 // Prints the variable x in the output section and word count in the wordcount section
@@ -38,7 +40,7 @@ function printOutput(x) {
     } else {
         document.getElementById("output").innerHTML = x + "<br>" + document.getElementById("output").innerHTML;
     }
-    document.getElementById("woordtel").innerHTML = "Je hebt al <b>" + GUESSES.length + "</b> woorden gevonden."
+    document.getElementById("woordtel").innerHTML = "Je hebt vandaag al <b>" + GUESSES.length + "</b> woorden gevonden."
 }
 
 // Prints the variable x as an invalid error message
@@ -61,10 +63,17 @@ function savetoStorage() {
 // Retrieves today's guesses from local storage
 function getfromStorage(d) {
     let jsonDate = localStorage.getItem("date");
+    let jsonGuesses = localStorage.getItem("guesses");
+    let jsonScoreHistory = localStorage.getItem("score-hist");
+    scoreHistory = JSON.parse(jsonScoreHistory);
     if (jsonDate == d) {
-        let jsonGuesses = localStorage.getItem("guesses");
         GUESSES = JSON.parse(jsonGuesses);
         GUESSES.forEach(g => printOutput(g));
+    } else {
+        let prevGuesses = JSON.parse(jsonGuesses);
+        scoreHistory.push(prevGuesses.length);
+        let jsonScoreHistory = JSON.stringify(scoreHistory);
+        localStorage.setItem("score-hist", jsonScoreHistory);   // Sets score history in local storage only on a new day
     }
 }
 
@@ -78,6 +87,7 @@ function selectWord(d) {
     CENTRAALLETTER = WOORDLETTERS[CENTRAALINDEX];
     [shuffle[0], shuffle[CENTRAALINDEX]] = [shuffle[CENTRAALINDEX], shuffle[0]] // Swaps the central letter index to the front so it can be avoided during shuffling
     shuffleLetters();
+    savetoStorage();
 };
 
 function isPangram(w) {

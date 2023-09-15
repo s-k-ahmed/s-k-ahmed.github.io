@@ -16,6 +16,7 @@
     <div class="inputs">
         <input type="text" id="woord-input">
         <input type="submit" id="submit-btn" onclick="submitWord()">
+        <p id="invalid-guess"></p>
         <br>
         <div class="main">
             <div class="buttons">
@@ -35,16 +36,17 @@
     </div>
 
     <div class="outputs">
-        <p id="invalid-guess"></p>
         <p id="test"></p>
-        <p id="woordtel"></p>
+        <p id="wordcount"></p>
         <p id="output"></p>
         <br>
-        <button class="show-answers" id="show-answers" onclick="showAnswers()">Show answers</button>
+        <p id="antwoord-tel"></p>
+        <button class="show-answers" id="show-answers" onclick="toggleAnswers()">Antwoorden tonen</button>
         <p id="antwoorden"></p>
     </div>
 
     <script type="text/javascript" src="basiswoorden-gekeurd-4letters.js"></script>
+    <script type="text/javascript" src="kortewoordenlijst-gekeurd.js"></script>
     <script type="text/javascript" src="zevenletters.js"></script>
     <script type="text/javascript" src="script.js"></script>
 

@@ -35,14 +35,14 @@ function testOutput(x) {
     document.getElementById("test").innerHTML += x + "<br>";
 }
 
-// Prints the variable x in the output section and word count in the wordcount section
+// Prints the variable x in the output section and word count + score in the wordcount section
 function printOutput(x) {
     if (isPangram(x)) {
         document.getElementById("output").innerHTML = "<b>" + x + "</b><br>" + document.getElementById("output").innerHTML;
     } else {
         document.getElementById("output").innerHTML = x + "<br>" + document.getElementById("output").innerHTML;
     }
-    document.getElementById("woordtel").innerHTML = "Je hebt vandaag al <b>" + GUESSES.length + "</b> woorden gevonden."
+    updateWordCountScore();
 }
 
 // Prints the variable x as an invalid error message
@@ -50,9 +50,14 @@ function printError(x) {
     document.getElementById("invalid-guess").innerHTML = x;
 }
 
-// TO-DO? Checks if the date matches the cached data, if not it deletes the previous day's info
-function checkDate(){
+// Prints/updates the word count and score
+function updateWordCountScore() {
+    document.getElementById("wordcount").innerHTML = "Je hebt vandaag al <b>" + GUESSES.length + "</b> woorden gevonden.<br>Score: " + calculateScore(GUESSES) + " (" + Math.round(calculateScore(GUESSES)*100/calculateScore(ANTWOORDEN)) + "%)";
+}
 
+// Calculates the score (1 for 4-letter words, etc.) for an array
+function calculateScore(arr) {
+    return arr.reduce((total, current) => isPangram(current) ? total + current.length + 7 : current.length > 4 ? total + current.length : current.length == 4 ? total + 1 : total, 0)
 }
 
 // Saves today's guesses to local storage
@@ -68,6 +73,7 @@ function getfromStorage(d) {
     let jsonGuesses = localStorage.getItem("guesses");
     let jsonScoreHistory = localStorage.getItem("score-hist");
     scoreHistory = JSON.parse(jsonScoreHistory);
+    // Gives default values if no local storage is already saved
     if (jsonDate == null) {
         return;
     }
@@ -77,16 +83,17 @@ function getfromStorage(d) {
     if (jsonScoreHistory == null) {
         scoreHistory = [];
     }
+    // Only loads and prints guesses if the day is the same as the last session
     if (jsonDate == d) {
         GUESSES = JSON.parse(jsonGuesses);
-        GUESSES.forEach(g => printOutput(g));
         return;
     }
-    localStorage.removeItem("answers");
-    let prevGuesses = JSON.parse(jsonGuesses);
-    scoreHistory.push(prevGuesses.length);    
-    jsonScoreHistory = JSON.stringify(scoreHistory);
-    localStorage.setItem("score-hist", jsonScoreHistory);   // Sets score history in local storage only on a new day
+    // If the day has changed since the last session...
+    localStorage.removeItem("answers");                     // Removes the cached answers to the previous puzzle
+    let prevGuesses = JSON.parse(jsonGuesses);              
+    scoreHistory.push(prevGuesses.length);                  // Adds the previous day's score to scoreHistory,
+    jsonScoreHistory = JSON.stringify(scoreHistory);        // ... then ...
+    localStorage.setItem("score-hist", jsonScoreHistory);   // Saves it in local storage
     
 }
 
@@ -100,6 +107,9 @@ function selectWord(d) {
     CENTRAALLETTER = WOORDLETTERS[CENTRAALINDEX];
     [shuffle[0], shuffle[CENTRAALINDEX]] = [shuffle[CENTRAALINDEX], shuffle[0]] // Swaps the central letter index to the front so it can be avoided during shuffling
     findSols();
+    GUESSES.forEach(g => printOutput(g));
+    updateWordCountScore();
+    document.getElementById("antwoord-tel").innerHTML = "Er staan <b>" + ANTWOORDEN.length + "</b> mogelijke antwoorden in onze kortere woordenlijst (score = " + calculateScore(ANTWOORDEN) + ").";
     shuffleLetters();
     savetoStorage();
 };
@@ -113,26 +123,33 @@ function isPangram(w) {
 // Finds all solutions to today's puzzle and saves them in the array ANTWOORDEN + local storage (only done once per day)
 function findSols() {
     let jsonAnswers = localStorage.getItem("answers");
+    // Imports answers from cache and escapes if there is cached content
+    // (FYI: cached answers data is removed for new puzzles in getfromStorage())
     if (jsonAnswers != null) {
         ANTWOORDEN = JSON.parse(jsonAnswers);
         return;
     }
-    WOORDEN.forEach(x => checkWord(x) ? ANTWOORDEN.push(x) : null);
-    jsonAnswers = JSON.stringify(ANTWOORDEN);
-    localStorage.setItem("answers", jsonAnswers);
+    // If there is no cached data...
+    BASISWOORDEN.forEach(x => checkWord(x) ? ANTWOORDEN.push(x) : null); // Checks each word in the smaller list to see if it is a valid answer
+    ZEVENS.forEach(x => (checkWord(x) && (ANTWOORDEN.indexOf(x) == -1)) ? ANTWOORDEN.push(x) : null);  // Also checks the sevens list and adds possible answers
+    ANTWOORDEN.sort();
+    jsonAnswers = JSON.stringify(ANTWOORDEN);                       // ... then ...
+    localStorage.setItem("answers", jsonAnswers);                   // Saves the valid answers in local storage
 }
 
-// Prints the list of possible answers
-function showAnswers() {
-    document.getElementById("antwoorden").innerHTML = "";
+// Toggles the printing of the list of possible answers
+function toggleAnswers() {
+    document.getElementById("antwoorden").innerHTML = "";   // Clears answer HTML paragraph
+    // If answers were already showing, then escapes
     if (answersShown) {
-        document.getElementById("show-answers").innerHTML = "Show answers";
+        document.getElementById("show-answers").innerHTML = "Antwoorden tonen";
         answersShown = false;
         return;
     }
-    document.getElementById("show-answers").innerHTML = "Hide answers";
-    document.getElementById("antwoorden").innerHTML = "Er staan <b>" + ANTWOORDEN.length + "</b> mogelijke antwoorden in ons woordenlijst.<br><br>";
+    // If answers were hidden, then shows answers
+    document.getElementById("show-answers").innerHTML = "Antwoorden verbergen";
     ANTWOORDEN.forEach(x => {
+        // If an answer is a pangram, then print it bold
         if (isPangram(x)) {
             document.getElementById("antwoorden").innerHTML += "<b>" + x + "</b><br>";
         } else {

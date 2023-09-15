@@ -17,7 +17,6 @@ if (typeof(Storage) == "undefined") {
 
 // Chooses a word and central letter based on the current day
 selectWord(dateUnix);
-testOutput(scoreHistory);
 
 // Sets up word submission on pressing Enter and shuffle on pressing Space
 document.getElementById("woord-input").addEventListener("keydown", function(event){
@@ -30,29 +29,37 @@ document.getElementById("woord-input").addEventListener("keydown", function(even
     }
 });
 
+function appendText(id, text) {
+    document.getElementById(id).innerHTML += text;
+}
+function printText(id, text) {
+    document.getElementById(id).innerHTML = text;
+}
+
 // Prints the variable x on the HTML page (used for testing/debugging)
 function testOutput(x) {
-    document.getElementById("test").innerHTML += x + "<br>";
+    appendText("test", x + "<br>");
 }
 
 // Prints the variable x in the output section and word count + score in the wordcount section
 function printOutput(x) {
+    let currentOutput = document.getElementById("output").innerHTML;
     if (isPangram(x)) {
-        document.getElementById("output").innerHTML = "<b>" + x + "</b><br>" + document.getElementById("output").innerHTML;
+        printText("output", "<b>" + x + "</b><br>" + currentOutput);
     } else {
-        document.getElementById("output").innerHTML = x + "<br>" + document.getElementById("output").innerHTML;
+        printText("output", x + "<br>" + currentOutput);
     }
     updateWordCountScore();
 }
 
 // Prints the variable x as an invalid error message
 function printError(x) {
-    document.getElementById("invalid-guess").innerHTML = x;
+    printText("invalid-guess", x);
 }
 
 // Prints/updates the word count and score
 function updateWordCountScore() {
-    document.getElementById("wordcount").innerHTML = "Je hebt vandaag al <b>" + GUESSES.length + "</b> woorden gevonden.<br>Score: " + calculateScore(GUESSES) + " (" + Math.round(calculateScore(GUESSES)*100/calculateScore(ANTWOORDEN)) + "%)";
+    printText("wordcount", "Je hebt vandaag al <b>" + GUESSES.length + "</b> woorden gevonden.<br>Score: " + calculateScore(GUESSES) + " (" + Math.round(calculateScore(GUESSES)*100/calculateScore(ANTWOORDEN)) + "%)");
 }
 
 // Calculates the score (1 for 4-letter words, etc.) for an array
@@ -71,8 +78,10 @@ function savetoStorage() {
 function getfromStorage(d) {
     let jsonDate = localStorage.getItem("date");
     let jsonGuesses = localStorage.getItem("guesses");
+    /*
     let jsonScoreHistory = localStorage.getItem("score-hist");
     scoreHistory = JSON.parse(jsonScoreHistory);
+    */
     // Gives default values if no local storage is already saved
     if (jsonDate == null) {
         return;
@@ -80,9 +89,11 @@ function getfromStorage(d) {
     if (jsonGuesses == null) {
         GUESSES = [];
     }
+    /*
     if (jsonScoreHistory == null) {
         scoreHistory = [];
     }
+    */
     // Only loads and prints guesses if the day is the same as the last session
     if (jsonDate == d) {
         GUESSES = JSON.parse(jsonGuesses);
@@ -90,11 +101,12 @@ function getfromStorage(d) {
     }
     // If the day has changed since the last session...
     localStorage.removeItem("answers");                     // Removes the cached answers to the previous puzzle
+    /*
     let prevGuesses = JSON.parse(jsonGuesses);              
     scoreHistory.push(prevGuesses.length);                  // Adds the previous day's score to scoreHistory,
     jsonScoreHistory = JSON.stringify(scoreHistory);        // ... then ...
     localStorage.setItem("score-hist", jsonScoreHistory);   // Saves it in local storage
-    
+    */
 }
 
 // Uses the day seed to select a pangram word and central letter
@@ -109,7 +121,7 @@ function selectWord(d) {
     findSols();
     GUESSES.forEach(g => printOutput(g));
     updateWordCountScore();
-    document.getElementById("antwoord-tel").innerHTML = "Er staan <b>" + ANTWOORDEN.length + "</b> mogelijke antwoorden in onze kortere woordenlijst (score = " + calculateScore(ANTWOORDEN) + ").";
+    printText("antwoord-tel", "Er staan <b>" + ANTWOORDEN.length + "</b> mogelijke antwoorden in onze kortere woordenlijst (score = " + calculateScore(ANTWOORDEN) + ").");
     shuffleLetters();
     savetoStorage();
 };
@@ -131,7 +143,6 @@ function findSols() {
     }
     // If there is no cached data...
     BASISWOORDEN.forEach(x => checkWord(x) ? ANTWOORDEN.push(x) : null); // Checks each word in the smaller list to see if it is a valid answer
-    ZEVENS.forEach(x => (checkWord(x) && (ANTWOORDEN.indexOf(x) == -1)) ? ANTWOORDEN.push(x) : null);  // Also checks the sevens list and adds possible answers
     ANTWOORDEN.sort();
     jsonAnswers = JSON.stringify(ANTWOORDEN);                       // ... then ...
     localStorage.setItem("answers", jsonAnswers);                   // Saves the valid answers in local storage
@@ -139,21 +150,21 @@ function findSols() {
 
 // Toggles the printing of the list of possible answers
 function toggleAnswers() {
-    document.getElementById("antwoorden").innerHTML = "";   // Clears answer HTML paragraph
+    printText("antwoorden", "");        // Clears answer HTML paragraph
     // If answers were already showing, then escapes
     if (answersShown) {
-        document.getElementById("show-answers").innerHTML = "Antwoorden tonen";
+        printText("show-answers", "Antwoorden tonen");
         answersShown = false;
         return;
     }
     // If answers were hidden, then shows answers
-    document.getElementById("show-answers").innerHTML = "Antwoorden verbergen";
+        printText("show-answers", "Antwoorden verbergen");
     ANTWOORDEN.forEach(x => {
         // If an answer is a pangram, then print it bold
         if (isPangram(x)) {
-            document.getElementById("antwoorden").innerHTML += "<b>" + x + "</b><br>";
+            appendText("antwoorden", "<b>" + x + "</b><br>");
         } else {
-            document.getElementById("antwoorden").innerHTML += x + "<br>";
+            appendText("antwoorden", x + "<br>");
         }
     });
     answersShown = true;
@@ -206,6 +217,7 @@ function submitWord() {
         printError("Invalid guess, please try again!");
         return;
     }
+    printError("<br>");     // Preserves the vertical shape of the page
     GUESSES.push(guess);
     printOutput(guess);
     savetoStorage();

@@ -18,6 +18,7 @@ if (typeof(Storage) == "undefined") {
 
 // Chooses a word and central letter based on the current day
 selectWord(dateUnix);
+focusInput();
 
 /*
     ***GAME FUNCTIONS***
@@ -97,7 +98,7 @@ function findSols() {
         return;
     }
     // If there is no cached data...
-    BASISWOORDEN.forEach(x => checkWord(x) ? ANTWOORDEN.push(x) : null); // Checks each word in the smaller list to see if it is a valid answer
+    BASISWOORDEN.forEach(x => isValidWord(x) ? ANTWOORDEN.push(x) : null); // Checks each word in the smaller list to see if it is a valid answer
     ANTWOORDEN.sort();
     jsonAnswers = JSON.stringify(ANTWOORDEN);                       // ... then ...
     localStorage.setItem("answers", jsonAnswers);                   // Saves the valid answers in local storage
@@ -107,7 +108,7 @@ function findSols() {
 function submitWord() {
     var guess = document.getElementById("woord-input").value.toLowerCase();
     document.getElementById("woord-input").value = "";
-    var guess_valid = checkWord(guess);
+    var guess_valid = isWord(guess) && isValidWord(guess);
     if (guess_valid == false) {
         printError("Invalid guess, please try again!");
         return;
@@ -116,14 +117,16 @@ function submitWord() {
     GUESSES.push(guess);
     printOutput(guess);
     savetoStorage();
-    document.getElementById("woord-input").focus();
+    focusInput();
+}
+
+// Checks to see if the input is a part of the long wordlist WOORDEN
+function isWord(w) {
+    return WOORDEN.some(x => x === w);
 }
 
 // Checks to see if the input is a valid guess
-function checkWord(w) {
-    // Is it part of the array WOORDEN? (which includes all words with 4+ letters)
-    let isWord = WOORDEN.some(x => x === w);
-
+function isValidWord(w) {
     // Does it only contain the letters given in the puzzle? Does it contain the central letter?
     let guessLetters = [];
     alphletters.forEach((value) => w.indexOf(value) != -1 ? guessLetters.push(value) : null);   // Creates array of letters in the guess
@@ -141,7 +144,7 @@ function checkWord(w) {
     let newguess = GUESSES.reduce((total, current) => current == w ? total + 1 : total, 0);     // Counts how many times this guess has been made already (incl. this time)
     let isNew = (newguess == 0);
 
-    let isNewValidWord = (isWord && isValid && isNew);
+    let isNewValidWord = (isValid && isNew);
     return isNewValidWord;
 };
 
@@ -235,7 +238,11 @@ document.getElementById("woord-input").addEventListener("keydown", function(even
         shuffleLetters();
     }
 });
-document.getElementById("woord-input").focus();
+
+// Selects the word input box if the screen is presented horizontally
+function focusInput() {
+    screen.orientation.type == "landscape-primary" ? document.getElementById("woord-input").focus() : null;
+}
 
 // Adds letters to input on button press
 function buttonPress(l) {

@@ -1,5 +1,6 @@
 // Initialises global variables
-let dateUnix = Math.floor(Date.now()/(1000*60*60*24));
+let date = new Date();
+let dateUnix = Math.floor((Date.now()-(date.getTimezoneOffset()*1000*60))/(1000*60*60*24)); // Set to change days at midnight in local timezone
 var WOORD;
 var CENTRAALINDEX;
 var CENTRAALLETTER;
@@ -79,9 +80,9 @@ function selectWord(d) {
     // Swaps the central letter index to the front so it can be avoided during shuffling
     [shuffle[0], shuffle[CENTRAALINDEX]] = [shuffle[CENTRAALINDEX], shuffle[0]]
     findSols();         // TIMING: This can take several seconds!
-    GUESSES.forEach(g => printOutput(g));
+    GUESSES.forEach(g => printOutput(g));   // Needs to be after findSols() so it can print the %age properly
     updateWordCountScore();
-    printText("antwoord-tel", "Er staan <b>" + ANTWOORDEN.length + "</b> mogelijke antwoorden in onze kortere woordenlijst (score = " + calculateScore(ANTWOORDEN) + ").");
+    printText("antwoord-tel", "Er staan <b>" + ANTWOORDEN.length + "</b> mogelijke antwoorden (score = " + calculateScore(ANTWOORDEN) + ") in onze kortere woordenlijst, die alleen de meest gebruikte woorden bevat.");
     shuffleLetters();
     savetoStorage();
 };
@@ -115,7 +116,7 @@ function submitWord() {
     GUESSES.push(guess);
     printOutput(guess);
     savetoStorage();
-    document.getElementById("woord-input").click();
+    document.getElementById("woord-input").focus();
 }
 
 // Checks to see if the input is a valid guess
@@ -193,7 +194,7 @@ function printError(x) {
 
 // Prints/updates the word count and score
 function updateWordCountScore() {
-    printText("wordcount", "Je hebt vandaag al <b>" + GUESSES.length + "</b> woorden gevonden.<br>Score: " + calculateScore(GUESSES) + " (" + Math.round(calculateScore(GUESSES)*100/calculateScore(ANTWOORDEN)) + "%)");
+    printText("wordcount", "Je hebt vandaag al <b>" + GUESSES.length + "</b> woorden gevonden.<br>Score: <b>" + calculateScore(GUESSES) + "</b> (" + Math.round(calculateScore(GUESSES)*100/calculateScore(ANTWOORDEN)) + "%)");
 }
 
 // Toggles the printing of the list of possible answers
@@ -230,6 +231,7 @@ document.getElementById("woord-input").addEventListener("keydown", function(even
         shuffleLetters();
     }
 });
+document.getElementById("woord-input").focus();
 
 // Adds letters to input on button press
 function buttonPress(l) {
@@ -257,5 +259,8 @@ function shuffleLetters(){
         [shuffle[i], shuffle[j]] = [shuffle[j], shuffle[i]];
     }
     shuffle.unshift(CENTRAALINDEX);     // Replaces first/central letter
+    //TO-DO: Sort out transition during shuffling
+    //shuffle.forEach((value) => value > 0 ? document.getElementById("letter"+value).style.color = "transparent" : null);
     shuffle.forEach((value) => assignLetter(value));
+    //setTimeout(shuffle.forEach((value) => document.getElementById("letter"+value).style.color = "black"), 60);
 }

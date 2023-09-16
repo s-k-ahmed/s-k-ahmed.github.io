@@ -197,6 +197,10 @@ function updateWordCountScore() {
     printText("wordcount", "Je hebt vandaag al <b>" + GUESSES.length + "</b> woorden gevonden.<br>Score: <b>" + calculateScore(GUESSES) + "</b> (" + Math.round(calculateScore(GUESSES)*100/calculateScore(ANTWOORDEN)) + "%)");
 }
 
+if (date.getHours() > 17) {
+    document.getElementById("answers").style.display = "inline";
+}
+
 // Toggles the printing of the list of possible answers
 function toggleAnswers() {
     printText("antwoorden", "");        // Clears answer HTML paragraph

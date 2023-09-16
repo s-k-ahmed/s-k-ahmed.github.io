@@ -26,6 +26,10 @@
     }
 }
 
+#answers {
+  display: none;
+}
+
 h1 {
     font: bold 36px Roboto, sans-serif;
     text-align: center;

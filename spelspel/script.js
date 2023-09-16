@@ -104,7 +104,7 @@ function findSols() {
 
 // Takes guess, checks if it is valid, then prints it/an error message and saves it to local storage.
 function submitWord() {
-    var guess = document.getElementById("woord-input").value;
+    var guess = document.getElementById("woord-input").value.toLowerCase();
     document.getElementById("woord-input").value = "";
     var guess_valid = checkWord(guess);
     if (guess_valid == false) {
@@ -233,7 +233,7 @@ document.getElementById("woord-input").addEventListener("keydown", function(even
 
 // Adds letters to input on button press
 function buttonPress(l) {
-    document.getElementById("woord-input").value += WOORDLETTERS[shuffle[l]];
+    document.getElementById("woord-input").value += WOORDLETTERS[shuffle[l]].toUpperCase();
 };
 
 // Delete the last letter inputted
@@ -246,7 +246,7 @@ function backspace() {
 
 // Labels a button with the appropriate letter in the shuffle array
 function assignLetter(l) {
-    document.getElementById("letter"+l).value = WOORDLETTERS[shuffle[l]];
+    document.getElementById("letter"+l).value = WOORDLETTERS[shuffle[l]].toUpperCase();
 }
 
 // Shuffles the shuffle array, excluding the first/central letter, and assigns them to the buttons

@@ -1,26 +1,32 @@
-.tile {
-    background-color: lightgray;
-    font: bold 2em Roboto, sans-serif;
-    text-align: center;
-    padding: 10px;
-    transition-duration: 0.25s;
-    width: 40px;
-    height: 40px;
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: flex-start;
 }
 
-.tilegrid {
-    display: grid;
-    margin: 30px;
-    grid-gap: 5px;
-    width: auto;
-    grid-template-columns: 20% 20% 20% 20% 20%;
-    justify-content: center;
-    align-content: center;
+.inputs {
+    font: 16px Roboto, sans-serif;
+    max-width: 360px;
+    margin: auto;
 }
 
+.outputs {
+    font: 16px Roboto, sans-serif;
+    margin: auto;
+}
+
+@media (max-width: 960px) {
+    .container {
+      flex-direction: column;
+    }
+    .outputs{
+        max-width: 360px;
+    }
+}
 
 h1 {
-    font: bold 40px Roboto, sans-serif;
+    font: bold 36px Roboto, sans-serif;
     text-align: center;
     margin: 20px;
 }
@@ -31,23 +37,13 @@ h2 {
     margin: 20px;
 }
 
-.inputs, .outputs {
-    font: 16px Roboto, sans-serif;
-    max-width: 360px;
-    margin: auto;
-}
-
-button {
-    font: 16px Roboto, sans-serif;
-}
-
 input[type=button] {
     border: none;
     padding: 15px 32px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: bold 48px;
+    font: bold 36px Roboto, sans-serif;
 }
 
 input[type=text] {
@@ -56,7 +52,7 @@ input[type=text] {
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 36px;
+    font: bold 36px Roboto, sans-serif;
     max-width: 300px;
 }
 
@@ -90,7 +86,7 @@ body {
     margin: var(--m);
     height: calc(var(--s)*1.1547); 
     display: inline-block;
-    font-size: 36px;
+    font-size: 30px;
     clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
     background: gainsboro;
     margin-bottom: calc(var(--m) - var(--s)*0.2885); 
@@ -98,13 +94,16 @@ body {
   #letter0 {
     background: darkorange;
   }
+  #submit-btn, #shuffle, #backspace {
+    background: #AAA;
+  }
   .buttons::before {
     content: "";
     width: calc(var(--s)/2 + var(--m));
     float: left;
     height: 100%;
-    /*shape-outside: repeating-linear-gradient(#000 0 10%, #0000 0 80%, #000 0 10%);*/
-    shape-outside: radial-gradient(#0000 95%, #000 5%);
+    shape-outside: repeating-linear-gradient(#000 0 10%, #0000 0 50%, #000 0 10%, #0000 0 50%);
+    /*shape-outside: radial-gradient(#0000 95%, #000 5%);*/
   }
 
 #antwoorden {

@@ -1,19 +1,20 @@
 // Initialises global variables
 let date = new Date();
 let dateUnix = Math.floor((Date.now()-(date.getTimezoneOffset()*1000*60))/(1000*60*60*24)); // Set to change days at midnight in local timezone
-var WOORD;
-var CENTRAALINDEX;
-var CENTRAALLETTER;
+let WOORD;
+let CENTRAALINDEX;
+let CENTRAALLETTER;
 const WOORDLETTERS = [];
 const alphletters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-var GUESSES = [];
-var ANTWOORDEN = [];
-var scoreHistory = [];
+let GUESSES = [];
+let ANTWOORDEN = [];
+let scoreHistory = [];
 const shuffle = [0, 1, 2, 3, 4, 5, 6];
-var answersShown = false;
+let answersShown = false;
+let answersSeen = false;
 
 if (typeof(Storage) == "undefined") {
-    alert("Sorry, your browser does not support local storage, so data won't be saved between sessions.")
+    alert("Sorry, je browser ondersteunt lokale webopslag niet, dus er worden tussen sessies geen gegevens opgeslagen.")
 }
 
 // Chooses a word and central letter based on the current day
@@ -29,28 +30,38 @@ function savetoStorage() {
     localStorage.setItem("date", dateUnix);
     let jsonGuesses = JSON.stringify(GUESSES);
     localStorage.setItem("guesses", jsonGuesses);
+    localStorage.setItem("todayScore", calculatePercentage(GUESSES, ANTWOORDEN));
+    localStorage.setItem("answersSeen", answersSeen);
 }
 
 // Retrieves today's guesses from local storage
 function getfromStorage(d) {
     let jsonDate = localStorage.getItem("date");
     let jsonGuesses = localStorage.getItem("guesses");
-    /*
     let jsonScoreHistory = localStorage.getItem("score-hist");
+    let jsonTodayScore = localStorage.getItem("todayScore");
+    let jsonAnswersSeen = localStorage.getItem("answersSeen");
     scoreHistory = JSON.parse(jsonScoreHistory);
-    */
-    // Gives default values for GUESSES (and scoreHistory) if no local storage is already saved
+    answersSeen = JSON.parse(jsonAnswersSeen);
+
+    // Gives default values for GUESSES, scoreHistory and answersSeen if no local storage is already saved
     if (jsonDate == null) {
+        openModal("about");
+        return;
+    }
+    if (jsonTodayScore == null) {
         return;
     }
     if (jsonGuesses == null) {
         GUESSES = [];
     }
-    /*
     if (jsonScoreHistory == null) {
         scoreHistory = [];
     }
-    */
+    if (jsonAnswersSeen == null || jsonAnswersSeen == "null") {
+        answersSeen = false;
+    }
+
     // Only loads and prints guesses if the day is the same as the last session
     if (jsonDate == d) {
         GUESSES = JSON.parse(jsonGuesses);
@@ -58,32 +69,33 @@ function getfromStorage(d) {
     }
     // If the day has changed since the last session...
     localStorage.removeItem("answers");                     // Removes the cached answers to the previous puzzle
-    /*
-    let prevGuesses = JSON.parse(jsonGuesses);              
-    scoreHistory.push(prevGuesses.length);                  // Adds the previous day's score to scoreHistory,
-    //TO-DO: Determine what gets saved to scoreHistory (e.g. nGuesses, raw score, percentage...)
+    scoreHistory.push(JSON.parse(jsonTodayScore));          // Adds the previous day's score to scoreHistory,
     jsonScoreHistory = JSON.stringify(scoreHistory);        // ... then ...
     localStorage.setItem("score-hist", jsonScoreHistory);   // Saves it in local storage
-    */
+    answersSeen = false;
 }
 
 // Uses the day as a seed to select a pangram word and central letter pseudo-randomly
 function selectWord(d) {
     getfromStorage(d);
+
     // Chooses a word pseudo-randomly from the zevens array
     let woordnummer = (d ** 3) % ZEVENS.length;
     WOORD = ZEVENS[woordnummer];
     alphletters.forEach((value) => WOORD.indexOf(value) != -1 ? WOORDLETTERS.push(value) : null);   // Goes through the alphabet in order and adds the letters of the chosen word to the array WOORDLETTERS
+    
     // Chooses a required letter from the word 
     // (23rd power gives equal probability for each of the 7 letters)
     CENTRAALINDEX = (d ** 23) % 7;  
     CENTRAALLETTER = WOORDLETTERS[CENTRAALINDEX];
+    
     // Swaps the central letter index to the front so it can be avoided during shuffling
     [shuffle[0], shuffle[CENTRAALINDEX]] = [shuffle[CENTRAALINDEX], shuffle[0]]
-    findSols();         // TIMING: This can take several seconds!
+    
+    findSols();
     GUESSES.forEach(g => printOutput(g));   // Needs to be after findSols() so it can print the %age properly
     updateWordCountScore();
-    printText("antwoord-tel", "Er staan <b>" + ANTWOORDEN.length + "</b> mogelijke antwoorden (score = " + calculateScore(ANTWOORDEN) + ") in onze kortere woordenlijst, die alleen de meest gebruikte woorden bevat.");
+    printText("antwoord-tel", "De woordheks heeft <b>" + ANTWOORDEN.length + "</b> woorden gevonden" + /*"(score = " + calculateScore(ANTWOORDEN) + ")*/ ". Kun je dat evenaren?");
     shuffleLetters();
     savetoStorage();
 };
@@ -98,19 +110,32 @@ function findSols() {
         return;
     }
     // If there is no cached data...
-    BASISWOORDEN.forEach(x => isValidWord(x) ? ANTWOORDEN.push(x) : null); // Checks each word in the smaller list to see if it is a valid answer
-    ANTWOORDEN.sort();
+    BASISWOORDEN.forEach(x => isValidWord(x) === true ? ANTWOORDEN.push(x) : null); // Checks each word in the smaller list to see if it is a valid answer
+    ANTWOORDEN.sort();                                              // Sorts them alphabetically
     jsonAnswers = JSON.stringify(ANTWOORDEN);                       // ... then ...
     localStorage.setItem("answers", jsonAnswers);                   // Saves the valid answers in local storage
 }
 
 // Takes guess, checks if it is valid, then prints it/an error message and saves it to local storage.
 function submitWord() {
-    var guess = document.getElementById("woord-input").value.toLowerCase();
+    let guess = document.getElementById("woord-input").value.toLowerCase();
     document.getElementById("woord-input").value = "";
-    var guess_valid = isWord(guess) && isValidWord(guess);
-    if (guess_valid == false) {
-        printError("Invalid guess, please try again!");
+    if (answersSeen == true) {
+        printError("Antwoorden al gezien");
+        return;
+    }
+    if (isValidWord(guess) != true) {
+        let error = isValidWord(guess);
+        let errorMessage = (
+            error == "wrongLetters" ? "Niet toegestaan letter(s)" :
+            error == "noCentral" ? "Geen centrale letter" :
+            error == "repeat" ? "Woord al gevonden" : null
+            );
+        printError(errorMessage);
+        return;
+    }
+    if (isWord(guess) == false) {
+        printError("Woord niet herkend");
         return;
     }
     printError("<br>");     // Preserves the vertical shape of the page
@@ -120,37 +145,44 @@ function submitWord() {
     focusInput();
 }
 
-// Checks to see if the input is a part of the long wordlist WOORDEN
+// Checks to see if the input is a part of the long wordlist WOORDEN (TRUE/FALSE)
 function isWord(w) {
     return WOORDEN.some(x => x === w);
 }
 
 // Checks to see if the input is a valid guess
+// Returns  TRUE if all conditions are met
+//          "wrongLetters" if the guess has an invalid letter
+//          "noCentral" if the guess does not contain the central letter
+//          "repeat" if the guess has already been made
 function isValidWord(w) {
     // Does it only contain the letters given in the puzzle? Does it contain the central letter?
     let guessLetters = [];
     alphletters.forEach((value) => w.indexOf(value) != -1 ? guessLetters.push(value) : null);   // Creates array of letters in the guess
     let hasValidLetters = guessLetters.every((value) => WOORDLETTERS.indexOf(value) != -1);     // Returns FALSE if any letter in the guess is not in the pangram
     if (hasValidLetters == false) {
-        return false;
+        return "wrongLetters";
     }
     let hasCentral = (guessLetters.indexOf(CENTRAALLETTER) != -1);                              // Returns FALSE if the central letter is missing
     if (hasCentral == false) {
-        return false;
+        return "noCentral";
     }
-    let isValid = (hasValidLetters && hasCentral);
-
     // Has this word already been guessed?
     let newguess = GUESSES.reduce((total, current) => current == w ? total + 1 : total, 0);     // Counts how many times this guess has been made already (incl. this time)
     let isNew = (newguess == 0);
-
-    let isNewValidWord = (isValid && isNew);
-    return isNewValidWord;
+    if (isNew == false) {
+        return "repeat";
+    }
+    return true;
 };
 
 // Calculates the score (1 for 4-letter words, etc.) for an array arr
 function calculateScore(arr) {
     return arr.reduce((total, current) => isPangram(current) ? total + current.length + 7 : current.length > 4 ? total + current.length : current.length == 4 ? total + 1 : total, 0)
+}
+
+function calculatePercentage(g, a) {
+    return Math.round(calculateScore(g)*100/calculateScore(a));
 }
 
 // Returns TRUE if w has 7 unique letters
@@ -192,12 +224,13 @@ function printOutput(x) {
 
 // Prints the variable x as an invalid error message
 function printError(x) {
-    printText("invalid-guess", x);
+    printText("invalid-guess", "<i>" + x + "</i>");
 }
 
 // Prints/updates the word count and score
+// TO-DO: Check that scoreHistory works as intended, then implement some way to access it (maybe compare with average score?)
 function updateWordCountScore() {
-    printText("wordcount", "Je hebt vandaag al <b>" + GUESSES.length + "</b> woorden gevonden.<br>Score: <b>" + calculateScore(GUESSES) + "</b> (" + Math.round(calculateScore(GUESSES)*100/calculateScore(ANTWOORDEN)) + "%)");
+    printText("wordcount", "Woorden: <b>" + GUESSES.length + "</b><br>Score: <b>" + calculatePercentage(GUESSES, ANTWOORDEN) + "</b>");
 }
 
 if (date.getHours() > 17) {
@@ -224,6 +257,8 @@ function toggleAnswers() {
         }
     });
     answersShown = true;
+    answersSeen = true;
+    savetoStorage();
 }; 
 
 // HTML INPUT
@@ -270,8 +305,17 @@ function shuffleLetters(){
         [shuffle[i], shuffle[j]] = [shuffle[j], shuffle[i]];
     }
     shuffle.unshift(CENTRAALINDEX);     // Replaces first/central letter
-    //TO-DO: Sort out transition during shuffling
-    //shuffle.forEach((value) => value > 0 ? document.getElementById("letter"+value).style.color = "transparent" : null);
     shuffle.forEach((value) => assignLetter(value));
-    //setTimeout(shuffle.forEach((value) => document.getElementById("letter"+value).style.color = "black"), 60);
+}
+
+// MODALS
+
+function openModal(id) {
+    let modal = document.getElementById(id);
+    modal.style.display = "block";
+}
+
+function closeModal(id) {
+    let modal = document.getElementById(id);
+    modal.style.display = "none";
 }

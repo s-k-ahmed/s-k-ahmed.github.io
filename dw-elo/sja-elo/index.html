@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>sja elo ranker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../dw-elo-style.css">
+</head>
+<body>
+    
+    <h1>SJA Elo-style episode ranker</h1>
+
+    <p>Check off which episodes you've seen with the check mark tools, then click "New rank options" to start ranking.</p>
+
+    <p id="storage">FYI: This website uses local storage in your browser to keep data between sessions. None of the data is sent server-side, so I can't see it, nor will you be tracked anywhere else.</p>
+    
+    <!--Give the option to add new watched episodes-->
+
+    <div id="ep-menu">
+        <p id="test"></p>
+
+        <p id="ep-watch-count"></p>
+        <p id="rank-count"></p>
+
+        <button class="hider" id="hide-eps" onclick="hideEps()">Show episodes</button><br>
+        <button class="hider" id="hide-drs" onclick="hideDrs()">Show Doctors</button>
+
+        <div id="ep-list-check"></div>
+
+        <div id="dr-list-check"></div>
+    </div>
+
+    <p></p>
+    
+    <!--Ranking engine-->
+
+    <div id="rank-engine">
+
+        <button class="ranker" id="option-1" onclick="rankerClick(1)">Option 1</button>
+        <button class="ranker" id="option-tie" onclick="rankerClick(0)">Tie</button>
+        <button class="ranker" id="option-2" onclick="rankerClick(-1)">Option 2</button>
+
+    </div>
+
+    <p></p>
+
+    <button id="new-options" onclick="newRankOptions()">New rank options</button>
+
+    <!--View output ranking-->
+
+    <p></p>
+
+    <button id="view-rankings" onclick="hideRankings()">Show rankings</button>
+    <button id="view-dr-rankings" onclick="hideDrRankings()">Show rankings by Doctor</button>
+
+    <pre id="ep-rankings"></pre>
+    <pre id="dr-rankings"></pre>
+
+    <!--
+    <p>
+        <button id="reset-all" onclick="resetLocalStorage()">⚠ Reset everything</button>
+    </p>
+    -->
+    
+    
+    <script type="text/javascript" src="sja-elo.js"></script>
+    <script type="text/javascript" src="../gen-elo.js"></script>
+
+</body>
+</html>

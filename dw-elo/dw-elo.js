@@ -1,5 +1,5 @@
 if (typeof(Storage) == "undefined") {
-    document.getElementById("storage").innerHTML += "<br> Sorry, your browser does not support local storage, so data won't be saved between sessions."
+    document.getElementById("storage").textContent += "\nSorry, your browser does not support local storage, so data won't be saved between sessions."
 }
 
 function resetClick(start, end, bool) {
@@ -49,24 +49,24 @@ function hideEps() {
     const epList = document.getElementById("ep-list-check");
     if (epList.style.display == "none") {
         epList.style.display = "block";
-        document.getElementById("hide-eps").innerHTML = "Hide episodes"
+        document.getElementById("hide-eps").textContent = "Hide episodes"
     } else {
         epList.style.display = "none";
-        document.getElementById("hide-eps").innerHTML = "Show episodes"
+        document.getElementById("hide-eps").textContent = "Show episodes"
     }
 }
 function hideDrs() {
     drList = document.getElementById("dr-list-check");
     if (drList.style.display == "none") {
         drList.style.display = "block";
-        document.getElementById("hide-drs").innerHTML = "Hide Doctors"
+        document.getElementById("hide-drs").textContent = "Hide Doctors"
     } else {
         drList.style.display = "none";
-        document.getElementById("hide-drs").innerHTML = "Show Doctors"
+        document.getElementById("hide-drs").textContent = "Show Doctors"
     }
 }
 function updateWatchCount() {
-    document.getElementById("ep-watch-count").innerHTML = "Episodes/serials watched: " + episodesWatched.filter(Boolean).length;
+    document.getElementById("ep-watch-count").textContent = "Episodes/serials watched: " + episodesWatched.filter(Boolean).length;
 }
 function initialise() {
     setUp();
@@ -114,9 +114,10 @@ function buildChecxLabels() {
         labepArray[ep] = document.createElement("label");
         labepArray[ep].for = "ep" + ep;
         labepArray[ep].id = "ep" + ep + "-lab";
-        labepArray[ep].innerHTML = episodeTitles[ep] + "<br>";
+        labepArray[ep].textContent = episodeTitles[ep];
         labepArray[ep].episode = ep;
         epListCheck.appendChild(labepArray[ep]);
+        epListCheck.append(document.createElement("br"));
     }
     
     for (dr=0; dr<doctors.length; dr++) {
@@ -130,9 +131,10 @@ function buildChecxLabels() {
         labdrArray[dr] = document.createElement("label");
         labdrArray[dr].for = "dr" + dr;
         labdrArray[dr].id = "dr" + dr + "-lab";
-        labdrArray[dr].innerHTML = doctors[dr] + "<br>";
+        labdrArray[dr].textContent = doctors[dr];
         labdrArray[dr].episode = dr;
         drListCheck.appendChild(labdrArray[dr]);
+        drListCheck.append(document.createElement("br"));
     }
 }
 function newRankOptions() {
@@ -141,8 +143,8 @@ function newRankOptions() {
     epsWatchIndices.sort((a, b) => (Math.random()*((episodesNRanked[a]+1)**2)) - (Math.random()*((episodesNRanked[b]+1)**2)))
     window.optionA = epsWatchIndices[0];
     window.optionB = epsWatchIndices[1];
-    document.getElementById("option-1").innerHTML = episodeTitles[optionA];
-    document.getElementById("option-2").innerHTML = episodeTitles[optionB];
+    document.getElementById("option-1").textContent = episodeTitles[optionA];
+    document.getElementById("option-2").textContent = episodeTitles[optionB];
 }
 function rankerClick(option) {
     episodesNRanked[window.optionA]++
@@ -171,10 +173,10 @@ function hideRankings(){
     const epRank = document.getElementById("ep-rankings");
     if (epRank.style.display == "none") {
         epRank.style.display = "block";
-        document.getElementById("view-rankings").innerHTML = "Hide rankings"
+        document.getElementById("view-rankings").textContent = "Hide rankings"
     } else {
         epRank.style.display = "none";
-        document.getElementById("view-rankings").innerHTML = "Show rankings"
+        document.getElementById("view-rankings").textContent = "Show rankings"
     }
 }
 function hideDrRankings(){
@@ -182,23 +184,23 @@ function hideDrRankings(){
     const drRank = document.getElementById("dr-rankings");
     if (drRank.style.display == "none") {
         drRank.style.display = "block";
-        document.getElementById("view-dr-rankings").innerHTML = "Hide rankings by Doctor"
+        document.getElementById("view-dr-rankings").textContent = "Hide rankings by Doctor"
     } else {
         drRank.style.display = "none";
-        document.getElementById("view-dr-rankings").innerHTML = "Show rankings by Doctor"
+        document.getElementById("view-dr-rankings").textContent = "Show rankings by Doctor"
     }
 }
 function updateEpRankings(){
-    document.getElementById("ep-rankings").innerHTML = "Rank \t Rating \t nRanked \t Episode";
+    document.getElementById("ep-rankings").textContent = "Rank \t Rating \t nRanked \t Episode";
     var epsRankIndices = [];
     episodesNRanked.forEach((value, index) => value > 0 && episodesWatched[index] == true ? epsRankIndices.push(index) : null);
     epsRankIndices.sort((a, b) => episodesElos[b] - episodesElos[a]);
     for (index = 0; index < epsRankIndices.length; index++) {
-        document.getElementById("ep-rankings").innerHTML += "<br>" + (index + 1) + "\t" + episodesElos[epsRankIndices[index]] + "\t" + episodesNRanked[epsRankIndices[index]] + "\t" + episodeTitles[epsRankIndices[index]];
+        document.getElementById("ep-rankings").textContent += "\n" + (index + 1) + "\t" + episodesElos[epsRankIndices[index]] + "\t" + episodesNRanked[epsRankIndices[index]] + "\t" + episodeTitles[epsRankIndices[index]];
     }
 }
 function updateDrRankings(){
-    document.getElementById("dr-rankings").innerHTML = "Rank \t avg Rating \t Doctor";
+    document.getElementById("dr-rankings").textContent = "Rank \t avg Rating \t Doctor";
     const drEloMeans = [];
     var drIndices = [];
     for (dr=0; dr < doctors.length; dr++) {
@@ -217,12 +219,12 @@ function updateDrRankings(){
     var drIndFilt = drIndices.filter(x => !isNaN(drEloMeans[x]))
     drIndFilt.sort((a, b) => drEloMeans[b] - drEloMeans[a]);
     for (index = 0; index < drIndFilt.length; index++) {
-        document.getElementById("dr-rankings").innerHTML += "<br>" + (index + 1) + "\t" + drEloMeans[drIndFilt[index]] + "\t" + doctors[drIndFilt[index]];
+        document.getElementById("dr-rankings").textContent += "\n" + (index + 1) + "\t" + drEloMeans[drIndFilt[index]] + "\t" + doctors[drIndFilt[index]];
     }
 }
 function updateRankCount(){
     var totalNRanked = episodesNRanked.reduce((x, y) => x + y) / 2;
-    document.getElementById("rank-count").innerHTML = "Rankings so far: " + totalNRanked;
+    document.getElementById("rank-count").textContent = "Rankings so far: " + totalNRanked;
 }
 
 const episodeTitles = [
@@ -263,10 +265,10 @@ const episodeTitles = [
     "The Macra Terror",
     "The Faceless Ones",
     "The Evil of the Daleks",
-    "Tomb of the Cybermen",
+    "The Tomb of the Cybermen",
     "The Abominable Snowmen",
     "The Ice Warriors",
-    "Enemy of the World",
+    "The Enemy of the World",
     "The Web of Fear",
     "Fury from the Deep",
     "The Wheel in Space",

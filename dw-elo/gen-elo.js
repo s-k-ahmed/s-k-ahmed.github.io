@@ -134,9 +134,14 @@ function buildChecxLabels() {
 function newRankOptions() {
     let epsWatchIndices = [];
     episodesWatched.forEach((value, index) => value === true ? epsWatchIndices.push(index) : null)
-    epsWatchIndices.sort((a, b) => (Math.random()*((episodesNRanked[a]+1)**2)) - (Math.random()*((episodesNRanked[b]+1)**2)))
-    optionA = epsWatchIndices[0];
-    optionB = epsWatchIndices[1];
+    epsWatchIndices.sort((a, b) => (Math.random()*((episodesNRanked[a]+1)**3)) - (Math.random()*((episodesNRanked[b]+1)**3)))
+    let index1 = 0;
+    let index2 = Math.floor(Math.random() * epsWatchIndices.length);
+    if (Math.random() > .5) {
+        [index1, index2] = [index2, index1];
+    }
+    optionA = epsWatchIndices[index1];
+    optionB = epsWatchIndices[index2];
     document.getElementById("option-1").textContent = episodeTitles[optionA];
     document.getElementById("option-2").textContent = episodeTitles[optionB];
 }

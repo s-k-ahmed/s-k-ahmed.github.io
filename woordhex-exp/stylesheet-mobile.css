@@ -10,8 +10,14 @@
   }
 
   html {
-    height: 90%;
     overflow: hidden;
+  }
+
+  body {
+    height: 90%;
+    position: fixed;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
   }
 
   

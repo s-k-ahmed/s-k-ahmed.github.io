@@ -9,9 +9,6 @@
     --letter-hex-f: calc(1.732 * var(--letter-hex-size) + 4 * var(--letter-hex-margin)  - 1px);
   }
 
-  body {
-    max-height: 90vh;
-  }
   
   h1 {
     font-size: 4.5vh;
@@ -129,6 +126,7 @@
 @media (max-width: 900px) {
   .container {
     flex-direction: column;
+    height: 85vh;
   }
 
     .outputs{

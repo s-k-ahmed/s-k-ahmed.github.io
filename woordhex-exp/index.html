@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WOORDHEX</title>
+    <link rel="icon" type="image/x-icon" href="images/favicon-heks.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap">
+    <link rel="stylesheet" href="stylesheet.css">
+    <link rel="stylesheet" href="stylesheet-mobile.css">
+    <link rel="stylesheet" href="stylesheet-landscape.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-cont">
+            <div class="header-bar">
+                <div class="title-block">
+                    <div class="title">WOORDHEX <span id=header-version>v<span id="footer-version-mobile"></span></span></div>
+                    <div class="subtitle">De zoektocht naar de woordenschat</div>
+                </div>
+                <div class="header-button-cont">
+                    <div class="header-button" onclick="openModal('puzzle-menu')">#<span id="header-woordhex-nummer-mobile"></span></div>
+                </div>
+            </div>
+        </div>
+        <div class="slider-container" id="slider-container">
+            <p id="score-comment"></p>
+            <div id="level-up-popup">Level up!</div>
+            <div class="slider-range">
+                <div class="slider-progress"></div>
+                <div class="slider-node user-node" id="user-node">
+                    <div class="slider-num slider-num-words" id="user-num-words-cont">
+                        <span class="slider-num-span user-num-words" id="user-num-words"></span>
+                    </div>
+                    <div class="slider-hex user-hex" id="user-hex">🏇</div>
+                    <div class="slider-num slider-num-score user-num-score-cont" id="user-num-score-cont">
+                        <span class="slider-num-span user-num-score" id="user-num-score"></span>
+                    </div>
+                </div>
+                <div class="slider-label-cont">
+                    <div class="slider-label slider-label-score" id="slider-label-score">S C O R E</div>
+                    <div class="slider-label slider-label-words" id="slider-label-words">W O O R D E N</div>
+                </div>
+                <div class="slider-node heks-node" id="heks-node-1">
+                    <div class="slider-num slider-num-words heks-num-words-cont" id="heks-num-words-cont-1">
+                        <span class="slider-num-span heks-num-words" id="heks-num-words-1"></span>
+                    </div>
+                    <div class="slider-hex heks-hex" id="heks-hex-1">💂‍♂️</div>
+                    <div class="slider-num slider-num-score heks-num-score-cont" id="heks-num-score-cont-1">
+                        <span class="slider-num-span heks-num-score" id="heks-num-score-1"></span>
+                    </div>
+                </div>
+                <div class="slider-node heks-node" id="heks-node-2">
+                    <div class="slider-num slider-num-words heks-num-words-cont" id="heks-num-words-cont-2">
+                        <span class="slider-num-span heks-num-words" id="heks-num-words-2"></span>
+                    </div>
+                    <div class="slider-hex heks-hex" id="heks-hex-2">🧙</div>
+                    <div class="slider-num slider-num-score heks-num-score-cont" id="heks-num-score-cont-2">
+                        <span class="slider-num-span heks-num-score" id="heks-num-score-2"></span>
+                    </div>
+                </div>
+                <div class="slider-node heks-node" id="heks-node-3">
+                    <div class="slider-num slider-num-words heks-num-words-cont" id="heks-num-words-cont-3">
+                        <span class="slider-num-span heks-num-words" id="heks-num-words-3"></span>
+                    </div>
+                    <div class="slider-hex heks-hex" id="heks-hex-3">🧙‍♀️</div>
+                    <div class="slider-num slider-num-score heks-num-score-cont" id="heks-num-score-cont-3">
+                        <span class="slider-num-span heks-num-score" id="heks-num-score-3"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="inputs">
+            <div class="inputbox">
+                <div id="woord-input" onclick="focusInput()" tabindex="0" contenteditable="true"></div>
+                <div id="invalid-guess"></div>
+            </div>
+            <div class="main">
+                <div class="letters">
+                    <div class="letter-row-odd" id="letter-row-1">
+                        <input type="button" id="letter1" onclick="buttonPress(1)">
+                        <input type="button" id="letter2" onclick="buttonPress(2)">
+                    </div>
+                    <div class="letter-row-even" id="letter-row-2">
+                        <input type="button" id="letter3" onclick="buttonPress(3)">
+                        <input type="button" id="letter0" onclick="buttonPress(0)">
+                        <input type="button" id="letter4" onclick="buttonPress(4)">
+                    </div>
+                    <div class="letter-row-odd" id="letter-row-3">
+                        <input type="button" id="letter5" onclick="buttonPress(5)">
+                        <input type="button" id="letter6" onclick="buttonPress(6)">
+                    </div>
+                    <div class="letter-row-even" id="letter-row-4">
+                        <input type="image" id="submit-btn" src="images/arrow-right-to-bracket-solid.svg" alt="Verzenden" onclick="submitWord()">
+                        <input type="image" id="shuffle" src="images/shuffle-solid.svg" alt="Shuffle" onclick="shuffleLetters()">
+                        <input type="image" id="backspace" src="images/delete-left-solid.svg" alt="Backspace" onclick="backspace()">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="outputs">
+            <p id="antwoord-tel"></p>
+            <p id="test"></p>
+            <!--
+            <p id="wordcount"></p>
+            -->
+            <div id="output-non-slider">
+                <button class="buttons" id="sort-guesses" onclick="toggleGuessSort()">Sorteren: tijd</button>
+                <button class="buttons" id="open-stats" onclick="openModal('stats')">Statistieken bekijken</button>
+                <p class="guesslist" id="guesses"></p>
+                <div id="pmdiv">
+                    <button class="buttons" id="show-answers" onclick="openAnsConfirm(1)">Antwoorden tonen</button>
+                    <button class="buttons" id="share" onclick="shareResult()">Score delen</button>
+                    <div id="result-shared"></div>
+                    <p class="guesslist" id="antwoorden"></p>
+                </div>
+            </div>
+            <footer>
+                <a href="#" onclick="openModal('about')">Over Woordhex</a>
+                <a href="#" id="footer-woordhex-nummer" onclick="openModal('puzzle-menu')">#</a>
+                <span class="footer-span" id="footer-version">v</span>
+            </footer>
+            <div class="button-bar" id="footer-button-bar">
+                <div class="footer-button" onclick="openModal('words')">Woorden</div>
+                <div class="footer-button" onclick="openModal('stats')">Statistiek</div>
+                <div class="footer-button" onclick="openModal('about')">Wat is dit?</div>
+            </div>
+        </div>
+       
+        <script type="text/javascript" src="lists/heks1-lijst.js"></script>
+        <script type="text/javascript" src="lists/heks2-lijst.js"></script>
+        <script type="text/javascript" src="lists/basiswoorden-gekeurd-4letters.js"></script>
+        <script type="text/javascript" src="lists/kortewoordenlijst-gekeurd.js"></script>
+        <script type="text/javascript" src="lists/zevenletters-kort.js"></script>
+        <script type="text/javascript" src="script.js"></script>
+        <script type="text/javascript" src="lists/zevenletters.js"></script>
+
+    </div>
+
+</body>
+</html>

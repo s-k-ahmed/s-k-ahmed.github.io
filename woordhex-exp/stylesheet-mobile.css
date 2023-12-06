@@ -13,10 +13,11 @@
     overflow: hidden;
   }
 
-  .container {
-    height: 90%;
+  body {
+    height: 100%;
     position: fixed;
-    overflow-y: hidden;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
   }
 
   

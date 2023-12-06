@@ -16,7 +16,6 @@
   body {
     height: 100%;
     width: 100vw;
-
     position: fixed;
     overflow-x: hidden;
     overflow-y: scroll;
@@ -140,7 +139,7 @@
 @media (max-width: 900px) {
   .container {
     flex-direction: column;
-    min-height: auto;
+    min-height: 90%;
   }
 
     .outputs{

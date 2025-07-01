@@ -1,0 +1,75 @@
+img {
+    width: 40%;
+    height: 40%;
+    max-width: 250px;
+    max-height: 250px;
+    /* float: right; */
+    object-fit: contain;
+    margin: auto;
+    display: flex;
+}
+
+.links > * {
+    float: right;
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+
+body {
+    font-family: 'Georgia';
+    display: flex;
+    justify-content: center;
+    background-color: palevioletred;
+    /* background-image: radial-gradient(circle, palevioletred 50%, rgb(151, 24, 88) 25%); */
+}
+
+p, li {
+    font-size: 11pt;
+}
+
+.main {
+    background-color:aliceblue;
+    width: calc(fit-content - 10px);
+    max-width: 600px;
+    padding: 20px;
+    border-radius: 5px;
+    margin: 0px 20px;
+}
+
+h1, h2, h3 {
+    font-family: 'Outfit';
+}
+
+a:not(.link) {
+    color: palevioletred;
+
+}
+
+a:hover {
+    color: rgb(151, 24, 88)
+}
+
+a.link {
+    /* float: right; */
+    clear: right;
+    background-color: palevioletred;
+    color: aliceblue;
+    padding: 10px;
+    border-radius: 5px;
+    /* margin-top: 10px; */
+    text-decoration: none;
+    font-family: 'Outfit';
+}
+
+a.link:hover{
+    background-color:rgb(151, 24, 88);
+}
+
+#ftpic {
+    width: auto;
+    max-width: 70%;   
+}
+
+li.bib {
+    margin-bottom: 5px;
+}

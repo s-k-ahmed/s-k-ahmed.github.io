@@ -1,3 +1,9 @@
+:root{
+    --themecol1med: palevioletred;
+    --themecol1dark: rgb(151, 24, 88);
+    --themecol2light: aliceblue;
+}
+
 img {
     width: 40%;
     height: 40%;
@@ -19,7 +25,7 @@ body {
     font-family: 'Georgia';
     display: flex;
     justify-content: center;
-    background-color: palevioletred;
+    background-color: var(--themecol1med);
     /* background-image: radial-gradient(circle, palevioletred 50%, rgb(151, 24, 88) 25%); */
 }
 
@@ -28,7 +34,7 @@ p, li {
 }
 
 .main {
-    background-color:aliceblue;
+    background-color:var(--themecol2light);
     width: calc(fit-content - 10px);
     max-width: 600px;
     padding: 20px;
@@ -41,19 +47,19 @@ h1, h2, h3 {
 }
 
 a:not(.link) {
-    color: palevioletred;
+    color: var(--themecol1med);
 
 }
 
 a:hover {
-    color: rgb(151, 24, 88)
+    color: var(--themecol1dark)
 }
 
 a.link {
     /* float: right; */
     clear: right;
-    background-color: palevioletred;
-    color: aliceblue;
+    background-color: var(--themecol1med);
+    color: var(--themecol2light);
     padding: 10px;
     border-radius: 5px;
     /* margin-top: 10px; */
@@ -62,12 +68,14 @@ a.link {
 }
 
 a.link:hover{
-    background-color:rgb(151, 24, 88);
+    background-color:var(--themecol1dark);
 }
 
 #ftpic {
     width: auto;
-    max-width: 70%;   
+    max-width: 70%;
+    padding-top: 15px;
+    height: auto;
 }
 
 li.bib {

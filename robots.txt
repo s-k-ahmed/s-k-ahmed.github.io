@@ -1,2 +1,19 @@
+User-agent: Googlebot
+Disallow: /iol/
+Disallow: /images/
+Disallow: /myprojects/
+
 User-agent: *
+Disallow: /
+
+User-agent: APIs-Google
+Disallow: /
+
+User-agent: AdsBot-Google-Mobile
+Disallow: /
+
+User-agent: AdsBot-Google
+Disallow: /
+
+User-agent: Mediapartners-Google
 Disallow: /

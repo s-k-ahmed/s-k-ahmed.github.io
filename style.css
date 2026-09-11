@@ -22,7 +22,7 @@ img {
 }
 
 body {
-    font-family: 'Georgia';
+    font-family: 'Unna', 'Georgia', serif;
     display: flex;
     justify-content: center;
     background-color: var(--themecol1med);
@@ -43,7 +43,7 @@ p, li {
 }
 
 h1, h2, h3 {
-    font-family: 'Outfit';
+    font-family: 'Outfit', sans-serif;
 }
 
 a:not(.link) {
